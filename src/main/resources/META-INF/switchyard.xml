@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:bean="urn:switchyard-component-bean:config:1.1" xmlns:resteasy="urn:switchyard-component-resteasy:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:sy="urn:switchyard-config:switchyard:1.1" name="meter-integration" targetNamespace="urn:gov.raleighnc.switchyard.integration:meter-integration:1.0">
+  <sca:composite name="meter-integration" targetNamespace="urn:gov.raleighnc.switchyard.integration:meter-integration:1.0">
+    <sca:component name="CwMeterServiceBean">
+      <bean:implementation.bean class="gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterServiceBean"/>
+      <sca:service name="CwMeterService">
+        <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterService"/>
+      </sca:service>
+      <sca:reference name="CwMeterRestInterface">
+        <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterRestInterface"/>
+      </sca:reference>
+      <sca:reference name="CwWoRestInterface">
+        <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwWoRestInterface"/>
+      </sca:reference>
+    </sca:component>
+    <sca:service name="CwMeterService" promote="CwMeterServiceBean/CwMeterService">
+      <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterService"/>
+      <resteasy:binding.rest name="CwMeterRestServices">
+        <resteasy:messageComposer class="gov.raleighnc.switchyard.integration.service.cwmeter.composer.CwMeterServiceRestComposer"/>
+        <resteasy:interfaces>gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterServiceJaxRs</resteasy:interfaces>
+        <resteasy:contextPath>switchyard-meter</resteasy:contextPath>
+      </resteasy:binding.rest>
+    </sca:service>
+    <sca:reference name="CwMeterRestInterface" multiplicity="0..1" promote="CwMeterServiceBean/CwMeterRestInterface">
+      <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterRestInterface"/>
+      <resteasy:binding.rest name="CWMeterWebServices">
+        <resteasy:interfaces>gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterRestInterfaceJaxRs</resteasy:interfaces>
+        <resteasy:address>http://im40cwapp2/cwccb/ccb</resteasy:address>
+      </resteasy:binding.rest>
+    </sca:reference>
+    <sca:reference name="CwWoRestInterface" multiplicity="0..1" promote="CwMeterServiceBean/CwWoRestInterface">
+      <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwWoRestInterface"/>
+      <resteasy:binding.rest name="CWWOWebServices">
+        <resteasy:messageComposer class="gov.raleighnc.switchyard.integration.service.cwmeter.composer.CwWoRestInterfaceComposer"/>
+        <resteasy:interfaces>gov.raleighnc.switchyard.integration.service.cwmeter.CwWoRestInterfaceJaxRs</resteasy:interfaces>
+        <resteasy:address>http://localhost:8080/switchyard-cw</resteasy:address>
+      </resteasy:binding.rest>
+    </sca:reference>
+  </sca:composite>
+</sy:switchyard>
