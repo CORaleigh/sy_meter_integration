@@ -28,4 +28,12 @@ public interface CwMeterService {
 	 * @return The result of the WorkOrder update
 	 */		
 	Result updateWorkOrder(CcbCwWorkOrder workorder);
+	
+	/**
+	 * Updates the meter information only and ignores any WorkOrder information
+	 * 
+	 * @param workorder The Meter part of the WorkOrder to update
+	 * @return The result of the Meter update
+	 */
+	Result updateMeter(CcbCwWorkOrder workorder);
 }

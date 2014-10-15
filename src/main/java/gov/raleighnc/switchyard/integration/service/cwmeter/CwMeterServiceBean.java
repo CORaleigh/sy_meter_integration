@@ -38,13 +38,8 @@ public class CwMeterServiceBean implements CwMeterService {
 	}
 	
 	@Override
-	public Result updateWorkOrder(CcbCwWorkOrder workorder) {
-		return new Result(false, null, "");
-	}
-	
-	@Override
 	public Result createWorkOrder(CcbCwWorkOrder workorder) {
-		Result validateResult = validateWorkOrder(workorder);
+		Result validateResult = validateWorkOrder(workorder, false);
 		
 		if (!validateResult.isSuccess()) {
 			return validateResult;
@@ -80,12 +75,82 @@ public class CwMeterServiceBean implements CwMeterService {
 		try {
 			mhJson = om.writeValueAsString(mh);
 		} catch (Exception e) {
+			cwWoRestInterface.deleteWorkOrder(woId);
+			return new Result(false, null, e.getMessage());
+		}
+				
+		String mhResultString = cwMeterRestInterface.createMeter(mhJson);
+		
+		// lowercase fieldnames
+		mhResultString = mhResultString.replaceAll("Success", "success");
+		mhResultString = mhResultString.replaceAll("Message", "message");
+		mhResultString = mhResultString.replaceAll("Exception", "exception");
+		
+		Result mhResult = null;
+		
+		try {
+			mhResult = om.readValue(mhResultString, Result.class);
+		} catch (Exception e) {
+			cwWoRestInterface.deleteWorkOrder(woId);
 			return new Result(false, null, e.getMessage());
 		}
 		
-
+		if (!mhResult.isSuccess()) {
+			cwWoRestInterface.deleteWorkOrder(woId);
+			return mhResult;
+		}		
 		
-		String mhResultString = cwMeterRestInterface.createMeter(mhJson);
+		// everything successful so return the successful woResult that contains the woId in the message
+		return woResult;  
+	}
+	
+	@Override
+	public Result updateWorkOrder(CcbCwWorkOrder workorder) {
+		Result validateResult = validateWorkOrder(workorder, false);
+		
+		if (!validateResult.isSuccess()) {
+			return validateResult;
+		}
+		
+		WorkOrder wo = workorder.getWorkOrder();
+		MeterHeader mh = workorder.getMeterHeader();
+		
+		if (wo.getWorkOrderId() == null || wo.getWorkOrderId().isEmpty()) {
+			return new Result(false, null, "No work order id was specified");
+		}
+		
+		String woJson = "";
+		
+		try {
+			woJson = om.writeValueAsString(wo);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		String woResultString = cwWoRestInterface.updateWorkOrder(woJson);
+		Result woResult = null;
+				
+		try {
+			woResult = om.readValue(woResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		if (!woResult.isSuccess()) {
+			return woResult;
+		}		
+		
+		mh.setWorkOrderId(wo.getWorkOrderId());
+		
+		String mhJson = "";
+		
+		try {
+			mhJson = om.writeValueAsString(mh);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+				
+		String mhResultString = cwMeterRestInterface.updateMeter(mhJson);
 		
 		// lowercase fieldnames
 		mhResultString = mhResultString.replaceAll("Success", "success");
@@ -102,19 +167,64 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		if (!mhResult.isSuccess()) {
 			return mhResult;
-		}		
+		}				
 		
-		// everything successful so return the successful woResult that contains the woId in the message
-		return woResult;  
+		return new Result(true, null, null);
 	}
+	
+	@Override
+	public Result updateMeter(CcbCwWorkOrder workorder) {
+		Result validateResult = validateWorkOrder(workorder, true);
+		
+		if (!validateResult.isSuccess()) {
+			return validateResult;
+		}
+		
+		MeterHeader mh = workorder.getMeterHeader();
+						
+		if (mh.getWorkOrderId() == null || mh.getWorkOrderId().isEmpty()) {
+			return new Result(false, null, "No work order id was specified");
+		}
+		
+		String mhJson = "";
+		
+		try {
+			mhJson = om.writeValueAsString(mh);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+				
+		String mhResultString = cwMeterRestInterface.updateMeter(mhJson);
+		
+		// lowercase fieldnames
+		mhResultString = mhResultString.replaceAll("Success", "success");
+		mhResultString = mhResultString.replaceAll("Message", "message");
+		mhResultString = mhResultString.replaceAll("Exception", "exception");
+		
+		Result mhResult = null;
+		
+		try {
+			mhResult = om.readValue(mhResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		if (!mhResult.isSuccess()) {
+			return mhResult;
+		}				
+		
+		return new Result(true, null, null);		
+	}
+	
 	
 	/**
 	 * Helper to validate fields in the CCB work order submitted.
 	 * 
 	 * @param workorder The workorder to validate
+	 * @param isMeterOnly if just validating meter part of work order only
 	 * @return a Result-- Success will be false if validation fails anywhere, true otherwise
 	 */
-	protected Result validateWorkOrder(CcbCwWorkOrder workorder) {
+	protected Result validateWorkOrder(CcbCwWorkOrder workorder, boolean isMeterOnly) {
 		if (workorder == null) {
 			return new Result(false, null, "No CCB WorkOrder submitted");
 		}
@@ -122,7 +232,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		WorkOrder wo = workorder.getWorkOrder();
 		MeterHeader mh = workorder.getMeterHeader();
 		
-		if (wo == null) {
+		if (wo == null && !isMeterOnly) {
 			return new Result(false, null, "No workorder information was submitted");
 		}
 		

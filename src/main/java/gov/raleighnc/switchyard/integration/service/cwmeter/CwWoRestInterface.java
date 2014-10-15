@@ -8,7 +8,27 @@ package gov.raleighnc.switchyard.integration.service.cwmeter;
  *
  */
 public interface CwWoRestInterface {
+	/**
+	 * Create a new work order in Cityworks.
+	 * 
+	 * @param workorderJson The WorkOrder to be created as a JSON string
+	 * @return The Result as a JSON string
+	 */
 	String createWorkOrder(String workorderJson);
 	
+	/**
+	 * Update an existing work order in Cityworks.
+	 * 
+	 * @param workorderJson The WorkOrder to be updated as a JSON string
+	 * @return The Result as a JSON string
+	 */
 	String updateWorkOrder(String workorderJson);
+	
+	/**
+	 * Deletes an existing work order in Cityworks.
+	 * 
+	 * @param workorderId The id of the existing work order to be deleted
+	 * @return The Result as a JSON string
+	 */
+	String deleteWorkOrder(String workorderId);
 }

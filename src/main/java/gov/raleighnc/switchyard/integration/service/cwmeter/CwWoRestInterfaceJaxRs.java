@@ -25,4 +25,10 @@ public interface CwWoRestInterfaceJaxRs {
     @Consumes({"application/json", "application/xml"})
     @Produces({"application/json", "application/xml"})
     String updateWorkOrder(String workorderJson);
+    
+    @POST
+    @Path("/deletewo")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String deleteWorkOrder(String workorderId);    
 }

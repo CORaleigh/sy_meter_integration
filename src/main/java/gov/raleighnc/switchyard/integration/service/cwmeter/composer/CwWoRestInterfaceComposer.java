@@ -20,7 +20,7 @@ public class CwWoRestInterfaceComposer extends RESTEasyMessageComposer {
     public Message compose(RESTEasyBindingData source, Exchange exchange) throws Exception {
         final Message message = super.compose(source, exchange);
         
-        if (source.getOperationName().equals("createWorkOrder")) {
+        if (source.getOperationName().equals("createWorkOrder") || source.getOperationName().equals("updateWorkOrder")) {
         	if (source.getParameters().length == 1) {
         		if (source.getParameters()[0] instanceof WorkOrder) {
         			message.setContent((WorkOrder)source.getParameters()[0]);
@@ -43,7 +43,7 @@ public class CwWoRestInterfaceComposer extends RESTEasyMessageComposer {
 
         target = super.decompose(exchange, target);
 
-        if (target.getOperationName().equals("createWorkOrder")
+        if ((target.getOperationName().equals("createWorkOrder") || target.getOperationName().equals("updateWorkOrder"))
             && (content != null) && (content instanceof WorkOrder)) {
             // Unwrap the parameters
             target.setParameters(new Object[]{
@@ -61,7 +61,10 @@ public class CwWoRestInterfaceComposer extends RESTEasyMessageComposer {
         		((WorkOrder)content).getWoCategory(),
         		((WorkOrder)content).getSubmitTo(),
         		((WorkOrder)content).getStatus(),
-        		((WorkOrder)content).getWoTemplateId()
+        		((WorkOrder)content).getWoTemplateId(),
+        		((WorkOrder)content).getWoAddress(),
+        		((WorkOrder)content).getWoXCoordinate(),
+        		((WorkOrder)content).getWoYCoordinate()
     		});
         } 
         
