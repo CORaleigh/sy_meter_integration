@@ -55,11 +55,16 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
     						((CcbCwWorkOrder)content).getMeterHeader().getCustomerName(),
     						((CcbCwWorkOrder)content).getMeterHeader().getCustomerPhone(),
     						((CcbCwWorkOrder)content).getMeterHeader().isLifeSupport(),
-    						((CcbCwWorkOrder)content).getMeterHeader().getAddress(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getStreetAddress(),
     						((CcbCwWorkOrder)content).getMeterHeader().getFaInstructions(),
     						((CcbCwWorkOrder)content).getMeterHeader().getFaComments(),
     						((CcbCwWorkOrder)content).getMeterHeader().getSpLocationDetails(),
     						((CcbCwWorkOrder)content).getMeterHeader().getSpType(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getPremiseType(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getTownship(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getCityLimit(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getUseClass(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getPostal(),
     						((CcbCwWorkOrder)content).getMeterHeader().getFaRemark(),
     						((CcbCwWorkOrder)content).getMeterHeader().getSpSourceStatus(),
     						((CcbCwWorkOrder)content).getMeterHeader().getDisconnectLocation(),
@@ -76,6 +81,7 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().isPerformDeviceTest(),
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().isCompoundMeter(),
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().isReadDateTime(),
+								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getSize(),
 								// register 1
 	    						new Object[] {
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getReading(),
@@ -83,6 +89,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getMiu(),
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getReadType(),
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getMrSource(),
+									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getSize(),
+									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getLowReadThreshold(),
+									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister1().getHighReadThreshold(),									
 	    						},
 								// register 2
 	    						new Object[] {
@@ -91,6 +100,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister2().getMiu(),
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister2().getReadType(),
 									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister2().getMrSource(),
+									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister2().getSize(),
+									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister2().getLowReadThreshold(),
+									((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getRegister2().getHighReadThreshold(),										
 	    						},    	    						
 								// device test
 	    						new Object[] {
@@ -103,6 +115,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getHighReadThreshold(),
 		    						},		
 									// register 2 before
 		    						new Object[] {
@@ -111,6 +126,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getHighReadThreshold(),										
 		    						},		
 									// register 1 after
 		    						new Object[] {
@@ -119,6 +137,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getHighReadThreshold(),										
 		    						},		
 									// register 2 after
 		    						new Object[] {
@@ -127,6 +148,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getHighReadThreshold(),											
 		    						},			    						
 		    						((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getTestStatus(),
 		    						((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getDeviceTest().getLowAccuracy(),
@@ -143,6 +167,7 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().isPerformDeviceTest(),
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().isCompoundMeter(),
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().isReadDateTime(),
+								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getSize(),
 								// register 1
 	    						new Object[] {
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getReading(),
@@ -150,6 +175,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getMiu(),
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getReadType(),
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getMrSource(),
+									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getSize(),
+									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getLowReadThreshold(),
+									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister1().getHighReadThreshold(),											
 	    						},
 								// register 2
 	    						new Object[] {
@@ -158,6 +186,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister2().getMiu(),
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister2().getReadType(),
 									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister2().getMrSource(),
+									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister2().getSize(),
+									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister2().getLowReadThreshold(),
+									((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getRegister2().getHighReadThreshold(),										
 	    						},    	    						
 								// device test
 	    						new Object[] {
@@ -170,6 +201,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getHighReadThreshold(),										
 		    						},		
 									// register 2 before
 		    						new Object[] {
@@ -178,6 +212,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getHighReadThreshold(),											
 		    						},		
 									// register 1 after
 		    						new Object[] {
@@ -186,6 +223,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getHighReadThreshold(),										
 		    						},		
 									// register 2 after
 		    						new Object[] {
@@ -194,6 +234,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getMiu(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getReadType(),
 										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getMrSource(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getSize(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getLowReadThreshold(),
+										((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getHighReadThreshold(),										
 		    						},			    						
 		    						((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getTestStatus(),
 		    						((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getDeviceTest().getLowAccuracy(),

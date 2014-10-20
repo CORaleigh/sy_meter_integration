@@ -1,7 +1,6 @@
 package gov.raleighnc.switchyard.integration.service.cwmeter;
 
 
-
 /**
  * Switchyard REST-based "Composite Reference" wired to the Cityworks system for using Cityworks custom REST-based Meter services only.
  * 
@@ -14,6 +13,16 @@ public interface CwMeterRestInterface {
 	String updateMeter(String jsonString);
 	
 	String getFaType(String fatype);
-	
-	String getCodeDescription(String code); 
+
+    String getFARemark(String code);     
+    
+    String getSourceStatus(String code);    
+    
+    String getDisconnectLocation(String code);
+    
+    String getSize(String code);    
+
+    String getReadType(String code);    
+    
+    String getMRSource(String code);     
 }

@@ -34,7 +34,32 @@ public interface CwMeterRestInterfaceJaxRs {
     String getFaType(@PathParam("fatype") String fatype);
     
     @GET
-    @Path("/getcode/{code}")
+    @Path("/getcode/{code}/FARemark")
     @Produces({"application/json"})
-    String getCodeDescription(@PathParam("code") String code);     
+    String getFARemark(@PathParam("code") String code);     
+    
+    @GET
+    @Path("/getcode/{code}/SourceStatus")
+    @Produces({"application/json"})
+    String getSourceStatus(@PathParam("code") String code);    
+    
+    @GET
+    @Path("/getcode/{code}/Disconnection")
+    @Produces({"application/json"})
+    String getDisconnectLocation(@PathParam("code") String code);
+    
+    @GET
+    @Path("/getcode/{code}/Size")
+    @Produces({"application/json"})
+    String getSize(@PathParam("code") String code);    
+    
+    @GET
+    @Path("/getcode/{code}/ReadType")
+    @Produces({"application/json"})
+    String getReadType(@PathParam("code") String code);    
+    
+    @GET
+    @Path("/getcode/{code}/MRSource")
+    @Produces({"application/json"})
+    String getMRSource(@PathParam("code") String code);     
 }

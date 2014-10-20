@@ -240,6 +240,18 @@ public class CwMeterServiceBean implements CwMeterService {
 			return new Result(false, null, "No meter information was submitted");
 		}
 		
+		if (mh.getStreetAddress() == null || mh.getStreetAddress().isEmpty()) {
+			return new Result(false, null, "No street address provided");
+		}
+		
+		if (mh.getTownship() == null || mh.getTownship().isEmpty()) {
+			return new Result(false, null, "No township provided");
+		}	
+		
+		if (mh.getPostal() == null || mh.getPostal().isEmpty()) {
+			return new Result(false, null, "No postal code provided");
+		}		
+		
 		if (mh.getFieldActivityType() == null || mh.getFieldActivityType().getCode() == null || mh.getFieldActivityType().getCode().isEmpty()) {
 			return new Result(false, null, "No field activity type provided");
 		} else {
@@ -263,7 +275,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		if (mh.getFaRemark() == null || mh.getFaRemark().getCode() == null || mh.getFaRemark().getCode().isEmpty()) {
 			return new Result(false, null, "No field activity remark provided");
 		} else {
-			String faRemark = cwMeterRestInterface.getCodeDescription(mh.getFaRemark().getCode());
+			String faRemark = cwMeterRestInterface.getFARemark(mh.getFaRemark().getCode());
 			
 			if (faRemark == null || faRemark.isEmpty()) {
 				return new Result(false, null, "Invalid field activity remark provided");
@@ -279,7 +291,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		if (mh.getSpSourceStatus() == null || mh.getSpSourceStatus().getCode() == null || mh.getSpSourceStatus().getCode().isEmpty()) {
 			return new Result(false, null, "No SP source status provided");
 		} else {
-			String spSource = cwMeterRestInterface.getCodeDescription(mh.getSpSourceStatus().getCode());
+			String spSource = cwMeterRestInterface.getSourceStatus(mh.getSpSourceStatus().getCode());
 			
 			if (spSource == null || spSource.isEmpty()) {
 				return new Result(false, null, "Invalid SP source status provided");
@@ -295,7 +307,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		if (mh.getDisconnectLocation() == null || mh.getDisconnectLocation().getCode() == null || mh.getDisconnectLocation().getCode().isEmpty()) {
 			return new Result(false, null, "No disconnection location provided");
 		} else {
-			String disconnect = cwMeterRestInterface.getCodeDescription(mh.getDisconnectLocation().getCode());
+			String disconnect = cwMeterRestInterface.getDisconnectLocation(mh.getDisconnectLocation().getCode());
 			
 			if (disconnect == null || disconnect.isEmpty()) {
 				return new Result(false, null, "Invalid disconnect location provided");
@@ -313,6 +325,22 @@ public class CwMeterServiceBean implements CwMeterService {
 				return new Result(false, null, "Invalid or no current meter id provided");
 			}
 			
+			if (mh.getCurrentMeter().getSize() == null || mh.getCurrentMeter().getSize().getCode() == null || mh.getCurrentMeter().getSize().getCode().isEmpty()) {
+				return new Result(false, null, "Invalid or no current meter size provided");
+			} else {
+				String size = cwMeterRestInterface.getSize(mh.getCurrentMeter().getSize().getCode());
+				
+				if (size == null || size.isEmpty()) {
+					return new Result(false, null, "Invalid current meter size provided");
+				} else {
+					try {
+						mh.getCurrentMeter().setSize(om.readValue(size, CodeDescription.class));
+					} catch (Exception e) {
+						return new Result(false, null, e.getMessage());
+					}
+				}
+			}
+			
 			Register reg1 = mh.getCurrentMeter().getRegister1();
 			
 			if (reg1 == null) {
@@ -322,7 +350,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			if (reg1.getReadType() == null || reg1.getReadType().getCode() == null || reg1.getReadType().getCode().isEmpty()) {
 				return new Result(false, null, "No register 1 read type information provided");
 			} else {
-				String readType = cwMeterRestInterface.getCodeDescription(reg1.getReadType().getCode());
+				String readType = cwMeterRestInterface.getReadType(reg1.getReadType().getCode());
 				
 				if (readType == null || readType.isEmpty()) {
 					return new Result(false, null, "Invalid register 1 read type provided");
@@ -338,7 +366,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			if (reg1.getMrSource() == null || reg1.getMrSource().getCode() == null || reg1.getMrSource().getCode().isEmpty()) {
 				return new Result(false, null, "No register 1 mr source information provided");
 			} else {
-				String mrSource = cwMeterRestInterface.getCodeDescription(reg1.getMrSource().getCode());
+				String mrSource = cwMeterRestInterface.getMRSource(reg1.getMrSource().getCode());
 				
 				if (mrSource == null || mrSource.isEmpty()) {
 					return new Result(false, null, "Invalid register 1 mr source provided");
@@ -351,6 +379,22 @@ public class CwMeterServiceBean implements CwMeterService {
 				}
 			}	
 			
+			if (reg1.getSize() == null || reg1.getSize().getCode() == null || reg1.getSize().getCode().isEmpty()) {
+				return new Result(false, null, "Invalid or no register 1 size provided");
+			} else {
+				String size = cwMeterRestInterface.getSize(reg1.getSize().getCode());
+				
+				if (size == null || size.isEmpty()) {
+					return new Result(false, null, "Invalid register 1 size provided");
+				} else {
+					try {
+						reg1.setSize(om.readValue(size, CodeDescription.class));
+					} catch (Exception e) {
+						return new Result(false, null, e.getMessage());
+					}
+				}
+			}			
+			
 			if (mh.getCurrentMeter().isCompoundMeter()) {
 				Register reg2 = mh.getCurrentMeter().getRegister2();
 				
@@ -361,7 +405,7 @@ public class CwMeterServiceBean implements CwMeterService {
 				if (reg2.getReadType() == null || reg2.getReadType().getCode() == null || reg2.getReadType().getCode().isEmpty()) {
 					return new Result(false, null, "No register 2 read type information provided");
 				} else {
-					String readType = cwMeterRestInterface.getCodeDescription(reg2.getReadType().getCode());
+					String readType = cwMeterRestInterface.getReadType(reg2.getReadType().getCode());
 					
 					if (readType == null || readType.isEmpty()) {
 						return new Result(false, null, "Invalid register 2 read type provided");
@@ -377,7 +421,7 @@ public class CwMeterServiceBean implements CwMeterService {
 				if (reg2.getMrSource() == null || reg2.getMrSource().getCode() == null || reg2.getMrSource().getCode().isEmpty()) {
 					return new Result(false, null, "No register 2 mr source information provided");
 				} else {
-					String mrSource = cwMeterRestInterface.getCodeDescription(reg2.getMrSource().getCode());
+					String mrSource = cwMeterRestInterface.getMRSource(reg2.getMrSource().getCode());
 					
 					if (mrSource == null || mrSource.isEmpty()) {
 						return new Result(false, null, "Invalid register 2 mr source provided");
@@ -389,13 +433,28 @@ public class CwMeterServiceBean implements CwMeterService {
 						}
 					}
 				}	
+				
+				if (reg2.getSize() == null || reg2.getSize().getCode() == null || reg2.getSize().getCode().isEmpty()) {
+					return new Result(false, null, "Invalid or no register 2 size provided");
+				} else {
+					String size = cwMeterRestInterface.getSize(reg2.getSize().getCode());
+					
+					if (size == null || size.isEmpty()) {
+						return new Result(false, null, "Invalid register 2 size provided");
+					} else {
+						try {
+							reg2.setSize(om.readValue(size, CodeDescription.class));
+						} catch (Exception e) {
+							return new Result(false, null, e.getMessage());
+						}
+					}
+				}					
 			}
 			
 		} else if (mh.getFieldActivityType().getStep1().getAction().equals("MR") || mh.getFieldActivityType().getStep1().getAction().equals("RM")) {
 			return new Result(false, null, "Field activity type specfied requires current meter information but none was provided");
 		}
 			
-		
 		return new Result(true, null, null);
 	}
 }
