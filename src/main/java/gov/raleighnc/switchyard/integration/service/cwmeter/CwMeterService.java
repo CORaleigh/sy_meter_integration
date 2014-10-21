@@ -30,6 +30,14 @@ public interface CwMeterService {
 	Result updateWorkOrder(CcbCwWorkOrder workorder);
 	
 	/**
+	 * Deletes the existing work order in the Cityworks system and returns a Result message. 
+	 * 
+	 * @param workorderId The id for the WorkOrder to delete
+	 * @return The result of the WorkOrder deletion
+	 */
+	Result deleteWorkOrder(String workorderId);	
+	
+	/**
 	 * Updates the meter information only and ignores any WorkOrder information
 	 * 
 	 * @param workorder The Meter part of the WorkOrder to update

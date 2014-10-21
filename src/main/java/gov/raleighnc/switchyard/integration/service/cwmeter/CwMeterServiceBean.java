@@ -173,6 +173,44 @@ public class CwMeterServiceBean implements CwMeterService {
 	}
 	
 	@Override
+	public Result deleteWorkOrder(String workorderId) {
+		if (workorderId == null || workorderId.isEmpty()) {
+			return new Result(false, null, "No workorder id was provided");
+		}
+		
+		String mResultString = cwMeterRestInterface.deleteMeter(workorderId);
+		
+		// lowercase fieldnames
+		mResultString = mResultString.replaceAll("Success", "success");
+		mResultString = mResultString.replaceAll("Message", "message");
+		mResultString = mResultString.replaceAll("Exception", "exception");
+		
+		Result mResult = null;
+		
+		try {
+			mResult = om.readValue(mResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		if (!mResult.isSuccess()) {
+			return mResult;
+		}					
+		
+		String woResultString = cwWoRestInterface.deleteWorkOrder(workorderId);
+		
+		Result woResult = null;
+		
+		try {
+			woResult = om.readValue(woResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		return woResult;
+	}
+	
+	@Override
 	public Result updateMeter(CcbCwWorkOrder workorder) {
 		Result validateResult = validateWorkOrder(workorder, true);
 		

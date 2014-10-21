@@ -8,9 +8,13 @@ package gov.raleighnc.switchyard.integration.service.cwmeter;
  *
  */
 public interface CwMeterRestInterface {
+	String getMeter(String workorderid);
+	
 	String createMeter(String jsonString);
 	
 	String updateMeter(String jsonString);
+	
+	String deleteMeter(String workorderid);
 	
 	String getFaType(String fatype);
 

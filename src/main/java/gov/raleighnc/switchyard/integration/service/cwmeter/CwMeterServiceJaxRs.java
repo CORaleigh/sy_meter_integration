@@ -26,7 +26,13 @@ public interface CwMeterServiceJaxRs {
     @Path("/updatewo")
     @Consumes({"application/json"})
     @Produces({"application/json"})	
-	Result updateWorkOrder(final CcbCwWorkOrder workorder);    
+	Result updateWorkOrder(final CcbCwWorkOrder workorder);
+    
+    @POST
+    @Path("/deletewo")
+    @Consumes({"application/json"})
+    @Produces({"application/json"})	
+	Result deleteWorkOrder(final String workorderId);       
     
     @POST
     @Path("/updatemeter")

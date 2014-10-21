@@ -16,6 +16,11 @@ import javax.ws.rs.Produces;
  */
 @Path("/")
 public interface CwMeterRestInterfaceJaxRs {
+    @GET
+    @Path("/getheader/{workorderid}")
+    @Produces({"application/json"})
+    String getMeter(@PathParam("workorderid") String workorderid);	
+	
     @POST
     @Path("/saveheader")
     @Consumes({"application/json", "application/xml"})
@@ -26,7 +31,13 @@ public interface CwMeterRestInterfaceJaxRs {
     @Path("/updateheader")
     @Consumes({"application/json", "application/xml"})
     @Produces({"application/json", "application/xml"})
-    String updateMeter(String jsonString);    
+    String updateMeter(String jsonString);  
+    
+    @POST
+    @Path("/deleteheader")
+    @Consumes({"application/json", "application/xml"})    
+    @Produces({"application/json", "application/xml"})
+    String deleteMeter(String workorderid);	    
     
     @GET
     @Path("/getfatype/{fatype}")
