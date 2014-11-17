@@ -310,9 +310,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			return new Result(false, null, "No field activity id provided");
 		}
 		
-		if (mh.getFaRemark() == null || mh.getFaRemark().getCode() == null || mh.getFaRemark().getCode().isEmpty()) {
-			return new Result(false, null, "No field activity remark provided");
-		} else {
+		if (mh.getFaRemark() != null && mh.getFaRemark().getCode() != null && !mh.getFaRemark().getCode().isEmpty()) {
 			String faRemark = cwMeterRestInterface.getFARemark(mh.getFaRemark().getCode());
 			
 			if (faRemark == null || faRemark.isEmpty()) {
@@ -326,9 +324,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			}
 		}
 		
-		if (mh.getSpSourceStatus() == null || mh.getSpSourceStatus().getCode() == null || mh.getSpSourceStatus().getCode().isEmpty()) {
-			return new Result(false, null, "No SP source status provided");
-		} else {
+		if (mh.getSpSourceStatus() != null && mh.getSpSourceStatus().getCode() != null && !mh.getSpSourceStatus().getCode().isEmpty()) {
 			String spSource = cwMeterRestInterface.getSourceStatus(mh.getSpSourceStatus().getCode());
 			
 			if (spSource == null || spSource.isEmpty()) {
@@ -342,9 +338,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			}
 		}		
 		
-		if (mh.getDisconnectLocation() == null || mh.getDisconnectLocation().getCode() == null || mh.getDisconnectLocation().getCode().isEmpty()) {
-			return new Result(false, null, "No disconnection location provided");
-		} else {
+		if (mh.getDisconnectLocation() != null && mh.getDisconnectLocation().getCode() != null && !mh.getDisconnectLocation().getCode().isEmpty()) {
 			String disconnect = cwMeterRestInterface.getDisconnectLocation(mh.getDisconnectLocation().getCode());
 			
 			if (disconnect == null || disconnect.isEmpty()) {
