@@ -289,7 +289,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		if (mh.getPostal() == null || mh.getPostal().isEmpty()) {
 			return new Result(false, null, "No postal code provided");
 		}		
-		
+			
 		if (mh.getFieldActivityType() == null || mh.getFieldActivityType().getCode() == null || mh.getFieldActivityType().getCode().isEmpty()) {
 			return new Result(false, null, "No field activity type provided");
 		} else {
@@ -356,6 +356,10 @@ public class CwMeterServiceBean implements CwMeterService {
 			if (mh.getCurrentMeter().getMeterId() <= 0) {
 				return new Result(false, null, "Invalid or no current meter id provided");
 			}
+			
+			if (mh.getCurrentMeter().getBadgeNumber() <= 0) {
+				return new Result(false, null, "Invalid or no current meter badge number provided");
+			}			
 			
 			if (mh.getCurrentMeter().getSize() == null || mh.getCurrentMeter().getSize().getCode() == null || mh.getCurrentMeter().getSize().getCode().isEmpty()) {
 				return new Result(false, null, "Invalid or no current meter size provided");

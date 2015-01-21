@@ -62,7 +62,17 @@
       <groupId>gov.raleighnc.switchyard.integration</groupId>
       <artifactId>integration-library</artifactId>
       <version>${integration.version}</version>
-    </dependency>	    
+    </dependency>
+    <dependency>
+    	<groupId>org.switchyard.components</groupId>
+    	<artifactId>switchyard-component-camel</artifactId>
+    	<version>${switchyard.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.switchyard.components</groupId>
+    	<artifactId>switchyard-component-soap</artifactId>
+    	<version>${switchyard.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
