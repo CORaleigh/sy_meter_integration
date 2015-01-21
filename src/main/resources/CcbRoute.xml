@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+    <route handleFault="true">
+        <from uri="switchyard://CcbService"/>
+        <process ref="ccbServiceRestProcessor"/>
+        <log message="CcbService - message received: ${body}"/>
+        <doTry>
+            <to uri="switchyard://CMCompleteFieldActivityPortType"/>
+            <process ref="ccbServiceSoapProcessor"/>
+            <doCatch>
+                <exception>java.lang.Exception</exception>
+                <to uri="log:xml?level=WARN"/>
+                <process ref="ccbServiceSoapFaultProcessor"/>
+            </doCatch>
+        </doTry>
+    </route>
+</routes>
