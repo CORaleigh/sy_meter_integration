@@ -126,7 +126,7 @@ public class CcbServiceRestProcessor implements Processor {
 	@Override
 	public void process(Exchange exchange) throws Exception {
     	CcbCwWorkOrder ccbcw = exchange.getIn().getBody(CcbCwWorkOrder.class);
-    	               
+    	   	               
     	// used to build SOAP message payload
         StringBuilder sb = new StringBuilder();
         
@@ -141,10 +141,18 @@ public class CcbServiceRestProcessor implements Processor {
 	        sb.append(ccbcw.getMeterHeader().getSpLocationDetails());
 	        sb.append("</meterLocation>");                
 	        sb.append("<servicePointSourceStatus>");
-	        sb.append(ccbcw.getMeterHeader().getSpSourceStatus().getCode());
+	        if (ccbcw.getMeterHeader().getSpSourceStatus() != null) {
+	        	sb.append(ccbcw.getMeterHeader().getSpSourceStatus().getCode());
+	        } else {
+	        	sb.append("");
+	        }
 	        sb.append("</servicePointSourceStatus>");       
 	        sb.append("<servicePointDisconnectLocation>");
-	        sb.append(ccbcw.getMeterHeader().getDisconnectLocation().getCode());
+	        if (ccbcw.getMeterHeader().getDisconnectLocation() != null) {
+	        	sb.append(ccbcw.getMeterHeader().getDisconnectLocation().getCode());
+	        } else {
+	        	sb.append("");
+	        }
 	        sb.append("</servicePointDisconnectLocation>");            
 	        sb.append("<customerContactLogInformation>");
 	        sb.append("");
@@ -156,7 +164,11 @@ public class CcbServiceRestProcessor implements Processor {
 	        sb.append("");
 	        sb.append("</meterInstallDate>");        
 	        sb.append("<fieldActivityRemarks>");
-	        sb.append(ccbcw.getMeterHeader().getFaRemark().getCode());
+	        if (ccbcw.getMeterHeader().getFaRemark() != null) {
+	        	sb.append(ccbcw.getMeterHeader().getFaRemark().getCode());
+	        } else {
+	        	sb.append("");
+	        }
 	        sb.append("</fieldActivityRemarks>");              
 	        sb.append("<workDateTime>");
 	        sb.append(sdf.format(new Date()));

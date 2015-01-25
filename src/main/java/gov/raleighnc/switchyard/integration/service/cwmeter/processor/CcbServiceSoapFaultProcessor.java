@@ -19,6 +19,7 @@ import org.switchyard.component.soap.composer.SOAPFaultInfo;
 public class CcbServiceSoapFaultProcessor implements Processor {
 	private static final String TEXT = "Text:";
 	private static final String DESCRIPTION = "Description:";
+	private static final String ALREADY_CLOSED = "Non-pending FA -";
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -33,9 +34,19 @@ public class CcbServiceSoapFaultProcessor implements Processor {
 
         // parse out the error message
         if (errorMessage.contains(TEXT) && errorMessage.contains(DESCRIPTION)) {
-        	int startIndex = errorMessage.indexOf(TEXT);
+        	int startIndex = errorMessage.indexOf(TEXT) + TEXT.length();
             int endIndex = errorMessage.indexOf(DESCRIPTION);
-            result.setException(errorMessage.substring(startIndex, endIndex).trim());
+            String errorMsg = errorMessage.substring(startIndex, endIndex).trim();
+            
+            // if error message happens to be because it was already closed, just return true to CW
+            // so it can continue processing to close it's own CW WO 
+            if (errorMsg.contains(ALREADY_CLOSED)) {
+            	result.setSuccess(true);
+            	result.setMessage("Success although FA already closed: " + errorMsg);
+            	// may want to log this somewhere
+            } else {
+                result.setException(errorMsg);
+            }
         }
         
         exchange.getOut().setBody(result);
