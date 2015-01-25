@@ -1,6 +1,7 @@
 package gov.raleighnc.switchyard.integration.service.cwmeter.processor;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import gov.raleighnc.switchyard.integration.domain.ccb.CcbCwWorkOrder;
 
@@ -24,7 +25,7 @@ import org.apache.camel.Processor;
     <interfaceLogs>[LEAVE_BLANK_FOR_NOW]</interfaceLogs> 
     <meterInstallDate>[LEAVE_BLANK]</meterInstallDate> 
     <fieldActivityRemarks>[faRemark]</fieldActivityRemarks> 
-    <workDateTime>[WO Closed Timestamp]</workDateTime> 
+    <workDateTime>new Date()</workDateTime> 
     <workedBy>[CW WorkOrderCompletedBy]</workedBy> <!-- needs to match up with CCB name -->
     <comments>[FAComments]</comments> 
     <meterReadInformation> 
@@ -35,7 +36,7 @@ import org.apache.camel.Processor;
             <readType>[ReadType]</readType>  
             <mrSource>[MrSource]</mrSource>  
             <useOnBill>true</useOnBill>  
-            <onOff>[LEAVE_BLANK]</onOff>  
+            <onOff>1</onOff>  
             <registerRead> 
                 <registerSequence>[register 1 -- use 1]</registerSequence> 
                 <currentMeterRead>[Reading]</currentMeterRead> 
@@ -52,7 +53,7 @@ import org.apache.camel.Processor;
             <readType>[ReadType]</readType>  
             <mrSource>[MrSource]</mrSource>  
             <useOnBill>true</useOnBill>  
-            <onOff>[LEAVE_BLANK]</onOff>  
+            <onOff>1</onOff>  
             <registerRead> 
                 <registerSequence>[register 1 -- use 1]</registerSequence> 
                 <currentMeterRead>[Reading]</currentMeterRead> 
@@ -70,7 +71,7 @@ import org.apache.camel.Processor;
             <readType>[ReadType]</readType>  
             <mrSource>[MrSource]</mrSource>  
             <useOnBill>true</useOnBill>  
-            <onOff>1</onOff>  <!-- always true for install meters -->
+            <onOff>1</onOff>
             <registerRead> 
                 <registerSequence>[register 1 -- use 1]</registerSequence> 
                 <currentMeterRead>[Reading]</currentMeterRead> 
@@ -108,11 +109,24 @@ public class CcbServiceRestProcessor implements Processor {
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss");  // ccb timestamp format 
 	
+	/**
+	 * Helper method to return blank values for long values that are 0
+	 *  
+	 * @param value The long value to check
+	 * @return Appropriate string value
+	 */
+	protected String processLongToString(long value) {
+		if (value == 0) {
+			return "";
+		} else {
+			return String.valueOf(value);
+		}
+	}
 	
 	@Override
 	public void process(Exchange exchange) throws Exception {
     	CcbCwWorkOrder ccbcw = exchange.getIn().getBody(CcbCwWorkOrder.class);
-               
+    	               
     	// used to build SOAP message payload
         StringBuilder sb = new StringBuilder();
         
@@ -145,7 +159,7 @@ public class CcbServiceRestProcessor implements Processor {
 	        sb.append(ccbcw.getMeterHeader().getFaRemark().getCode());
 	        sb.append("</fieldActivityRemarks>");              
 	        sb.append("<workDateTime>");
-	        sb.append(sdf.format(ccbcw.getWorkOrder().getDateWoClosed()));
+	        sb.append(sdf.format(new Date()));
 	        sb.append("</workDateTime>");        
 	        sb.append("<workedBy>");
 	        sb.append(ccbcw.getWorkOrder().getWorkCompletedBy());
@@ -189,12 +203,7 @@ public class CcbServiceRestProcessor implements Processor {
 			        sb.append("true");        
 			        sb.append("</useOnBill>");         
 			        sb.append("<onOff>");  
-			        if (ccbcw.getMeterHeader().getFieldActivityType().getStep1().getAction().equals(IM)
-		        		&& ccbcw.getMeterHeader().getInstallMeter() != null) {
-			        	sb.append("1");
-			        } else {
-			        	sb.append("");
-			        }
+		        	sb.append("1");
 			        sb.append("</onOff>");     
 			        sb.append("<registerRead>");  
 				        sb.append("<registerSequence>");
@@ -211,9 +220,9 @@ public class CcbServiceRestProcessor implements Processor {
 				        sb.append("<miu>");
 				        if (ccbcw.getMeterHeader().getFieldActivityType().getStep1().getAction().equals(IM)
 			        		&& ccbcw.getMeterHeader().getInstallMeter() != null) {
-				        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMiu());
+				        	sb.append(processLongToString(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMiu()));
 				        } else {
-				        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMiu());
+				        	sb.append(processLongToString(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMiu()));
 				        }
 				        sb.append("</miu>");
 				        
@@ -228,7 +237,7 @@ public class CcbServiceRestProcessor implements Processor {
 					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister2().getReading());
 					        sb.append("</currentMeterRead>");        
 					        sb.append("<miu>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister2().getMiu());
+					        sb.append(processLongToString(ccbcw.getMeterHeader().getInstallMeter().getRegister2().getMiu()));
 					        sb.append("</miu>");
 				        } else if (ccbcw.getMeterHeader().getCurrentMeter().getRegister2() != null 
 			        		&& ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getReading() > 0) {
@@ -239,7 +248,7 @@ public class CcbServiceRestProcessor implements Processor {
 					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getReading());
 					        sb.append("</currentMeterRead>");        
 					        sb.append("<miu>");
-					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getMiu());
+					        sb.append(processLongToString(ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getMiu()));
 					        sb.append("</miu>");
 				        }
 			        sb.append("</registerRead>");        
@@ -267,7 +276,7 @@ public class CcbServiceRestProcessor implements Processor {
 				        sb.append("true");        
 				        sb.append("</useOnBill>");         
 				        sb.append("<onOff>");  
-			        	sb.append("");
+			        	sb.append("1");
 				        sb.append("</onOff>");     
 				        sb.append("<registerRead>");  
 					        sb.append("<registerSequence>");
@@ -277,7 +286,7 @@ public class CcbServiceRestProcessor implements Processor {
 				        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReading());
 					        sb.append("</currentMeterRead>");        
 					        sb.append("<miu>");
-				        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMiu());
+				        	sb.append(processLongToString(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMiu()));
 					        sb.append("</miu>");
 					        
 					        if (ccbcw.getMeterHeader().getCurrentMeter().getRegister2() != null 
@@ -289,7 +298,7 @@ public class CcbServiceRestProcessor implements Processor {
 						        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getReading());
 						        sb.append("</currentMeterRead>");        
 						        sb.append("<miu>");
-						        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getMiu());
+						        sb.append(processLongToString(ccbcw.getMeterHeader().getCurrentMeter().getRegister2().getMiu()));
 						        sb.append("</miu>");
 					        }
 				        sb.append("</registerRead>");        
@@ -329,7 +338,7 @@ public class CcbServiceRestProcessor implements Processor {
 				        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReading());
 					        sb.append("</currentMeterRead>");        
 					        sb.append("<miu>");
-				        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMiu());
+				        	sb.append(processLongToString(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMiu()));
 					        sb.append("</miu>");
 					        
 					        if (ccbcw.getMeterHeader().getInstallMeter().getRegister2() != null 
@@ -341,7 +350,7 @@ public class CcbServiceRestProcessor implements Processor {
 						        sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister2().getReading());
 						        sb.append("</currentMeterRead>");        
 						        sb.append("<miu>");
-						        sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister2().getMiu());
+						        sb.append(processLongToString(ccbcw.getMeterHeader().getInstallMeter().getRegister2().getMiu()));
 						        sb.append("</miu>");
 					        }
 				        sb.append("</registerRead>");        

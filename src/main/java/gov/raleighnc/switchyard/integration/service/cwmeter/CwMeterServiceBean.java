@@ -2,10 +2,11 @@ package gov.raleighnc.switchyard.integration.service.cwmeter;
 
 import javax.inject.Inject;
 
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.switchyard.component.bean.Reference;
 import org.switchyard.component.bean.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 import gov.raleighnc.switchyard.integration.domain.Result;
 import gov.raleighnc.switchyard.integration.domain.ccb.CcbCwWorkOrder;
@@ -33,8 +34,8 @@ public class CwMeterServiceBean implements CwMeterService {
 	 */
 	public CwMeterServiceBean() {
 		om = new ObjectMapper();
-		om.configure(DeserializationConfig.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-		om.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		om.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 	
 	@Override
@@ -486,7 +487,10 @@ public class CwMeterServiceBean implements CwMeterService {
 					}
 				}					
 			}
-			
+		
+		} else if (mh.getFieldActivityType().getStep1() == null || mh.getFieldActivityType().getStep1().getAction() == null) {
+			return new Result(false, null, "A step1 and corresponding action must be provided if current meter information is not provided");
+		
 		} else if (mh.getFieldActivityType().getStep1().getAction().equals("MR") || mh.getFieldActivityType().getStep1().getAction().equals("RM")) {
 			return new Result(false, null, "Field activity type specfied requires current meter information but none was provided");
 		}
