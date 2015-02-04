@@ -50,6 +50,7 @@
     <sca:service name="CcbService" promote="CcbRoute/CcbService">
       <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CcbService"/>
       <resteasy:binding.rest name="CcbRestServices">
+        <resteasy:contextMapper class="gov.raleighnc.switchyard.integration.service.cwmeter.mapper.CorsRESTEasyContextMapper"/>
         <resteasy:interfaces>gov.raleighnc.switchyard.integration.service.cwmeter.CcbServiceJaxRs</resteasy:interfaces>
         <resteasy:contextPath>switchyard-ccb</resteasy:contextPath>
       </resteasy:binding.rest>
