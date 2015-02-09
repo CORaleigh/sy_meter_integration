@@ -47,6 +47,10 @@ public class CwMeterServiceBean implements CwMeterService {
 		}
 		
 		WorkOrder wo = workorder.getWorkOrder();
+		
+		// requirement is to set text1 of WO in CW to the SP ID value
+		wo.setText1(workorder.getMeterHeader().getSpId());
+		
 		String woJson = "";
 		
 		try {
@@ -115,6 +119,9 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		WorkOrder wo = workorder.getWorkOrder();
 		MeterHeader mh = workorder.getMeterHeader();
+		
+		// requirement is to set text1 of WO in CW to the SP ID value
+		wo.setText1(mh.getSpId());
 		
 		if (wo.getWorkOrderId() == null || wo.getWorkOrderId().isEmpty()) {
 			return new Result(false, null, "No work order id was specified");
@@ -277,6 +284,10 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		if (mh == null) {
 			return new Result(false, null, "No meter information was submitted");
+		}
+		
+		if (mh.getSpId() == null || mh.getSpId().isEmpty()) {
+			return new Result(false, null, "No SP ID provided");
 		}
 		
 		if (mh.getStreetAddress() == null || mh.getStreetAddress().isEmpty()) {
