@@ -1,8 +1,8 @@
 package gov.raleighnc.switchyard.integration.service.cwmeter;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
@@ -13,8 +13,8 @@ import javax.ws.rs.Produces;
  */
 @Path("/")
 public interface ArcGisRestInterfaceJaxRs {
-    @GET
-    @Path("?where=CCBSPID={spId}&outFields=objectid,facilityid&f=json")
+    @POST
+    @Consumes({"application/x-www-form-urlencoded; charset=UTF-8"})
     @Produces({"application/json"})
-    String getFacilityIdAndObjectId(@PathParam("spId") String spId);	
+    String getFacilityIdAndObjectId(String payload);	
 }

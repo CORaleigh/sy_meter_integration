@@ -7,5 +7,5 @@ package gov.raleighnc.switchyard.integration.service.cwmeter;
  *
  */
 public interface ArcGisRestInterface {
-	String getFacilityIdAndObjectId(String spId);
+	String getFacilityIdAndObjectId(String payload);
 }

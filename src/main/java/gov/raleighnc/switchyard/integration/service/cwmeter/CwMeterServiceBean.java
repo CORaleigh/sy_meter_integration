@@ -88,9 +88,11 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		// (2) check to see if facility id already exists for SP ID
 		
-		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(spId);
+		String payload = "where=CCBSPID=" + spId + "&outFields=objectid,facilityid&f=json";
+		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(payload);
 		int objectId = 0;
 		String facilityId = null;
+		System.out.println("spIdResultJson = " + spIdResultJson);
 		
 		try {
 			JsonNode rootNode = om.readValue(spIdResultJson, JsonNode.class);
