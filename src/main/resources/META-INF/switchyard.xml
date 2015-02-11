@@ -12,6 +12,9 @@
       <sca:reference name="CwWoRestInterface">
         <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwWoRestInterface"/>
       </sca:reference>
+      <sca:reference name="ArcGisRestInterface">
+        <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.ArcGisRestInterface"/>
+      </sca:reference>
     </sca:component>
     <sca:service name="CwMeterService" promote="CwMeterServiceBean/CwMeterService">
       <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CwMeterService"/>
@@ -50,7 +53,6 @@
     <sca:service name="CcbService" promote="CcbRoute/CcbService">
       <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.CcbService"/>
       <resteasy:binding.rest name="CcbRestServices">
-        <resteasy:contextMapper class="gov.raleighnc.switchyard.integration.service.cwmeter.mapper.CorsRESTEasyContextMapper"/>
         <resteasy:interfaces>gov.raleighnc.switchyard.integration.service.cwmeter.CcbServiceJaxRs</resteasy:interfaces>
         <resteasy:contextPath>switchyard-ccb</resteasy:contextPath>
       </resteasy:binding.rest>
@@ -66,6 +68,13 @@
           <soap:password>selfservice1</soap:password>
         </soap:basic>
       </soap:binding.soap>
+    </sca:reference>
+    <sca:reference name="ArcGisRestInterface" multiplicity="0..1" promote="CwMeterServiceBean/ArcGisRestInterface">
+      <sca:interface.java interface="gov.raleighnc.switchyard.integration.service.cwmeter.ArcGisRestInterface"/>
+      <resteasy:binding.rest name="ArcGisWebServices">
+        <resteasy:interfaces>gov.raleighnc.switchyard.integration.service.cwmeter.ArcGisRestInterfaceJaxRs</resteasy:interfaces>
+        <resteasy:address>http://cworktstarcsvr1:6080/arcgis/rest/services/Meters/MapServer/0/query</resteasy:address>
+      </resteasy:binding.rest>
     </sca:reference>
   </sca:composite>
 </sy:switchyard>

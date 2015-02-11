@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.switchyard.component.bean.Reference;
 import org.switchyard.component.bean.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 
@@ -15,6 +16,7 @@ import gov.raleighnc.switchyard.integration.domain.ccb.meter.FieldActivityType;
 import gov.raleighnc.switchyard.integration.domain.ccb.meter.MeterHeader;
 import gov.raleighnc.switchyard.integration.domain.ccb.meter.Register;
 import gov.raleighnc.switchyard.integration.domain.cityworks.workorder.WorkOrder;
+import gov.raleighnc.switchyard.integration.domain.cityworks.workorder.WorkOrderEntity;
 
 @Service(CwMeterService.class)
 public class CwMeterServiceBean implements CwMeterService {
@@ -27,7 +29,13 @@ public class CwMeterServiceBean implements CwMeterService {
 	@Reference
 	private CwWoRestInterface cwWoRestInterface;	
 	
+	@Inject
+	@Reference
+	private ArcGisRestInterface arcGisRestInterface;
+	
 	private ObjectMapper om;
+	
+	private final static String METER_ENTITY_TYPE = "WSERVICECONNECTION";
 	
 	/**
 	 * Default no-arg constructor
@@ -46,10 +54,14 @@ public class CwMeterServiceBean implements CwMeterService {
 			return validateResult;
 		}
 		
+		// (1) create WO in CW
+		
 		WorkOrder wo = workorder.getWorkOrder();
 		
+		String spId = workorder.getMeterHeader().getSpId();
+		
 		// requirement is to set text1 of WO in CW to the SP ID value
-		wo.setText1(workorder.getMeterHeader().getSpId());
+		wo.setText1(spId);
 		
 		String woJson = "";
 		
@@ -73,6 +85,56 @@ public class CwMeterServiceBean implements CwMeterService {
 		}
 		
 		String woId = woResult.getMessage();
+		
+		// (2) check to see if facility id already exists for SP ID
+		
+		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(spId);
+		int objectId = 0;
+		String facilityId = null;
+		
+		try {
+			JsonNode rootNode = om.readValue(spIdResultJson, JsonNode.class);
+			
+			objectId = rootNode.path("features").path("attributes").path("OBJECTID").intValue();
+			facilityId = rootNode.path("features").path("attributes").path("FACILITYID").textValue();
+		} catch (Exception e) {
+			return new Result(false, "Issues retrieving object and facility ids for SP ID = " + spId, e.getMessage());
+		}
+		
+		// (3) if both object id and facility id have values from ArcGIS, push this into WOE so it will become attached in CW
+		// if nothing is returned for either value, just skip this section and hence WO will be unattached
+		if (objectId > 0 && facilityId != null && !facilityId.isEmpty()) {
+			WorkOrderEntity woe = new WorkOrderEntity();
+			woe.setWorkOrderId(woId);
+			woe.setEntityUid(facilityId);
+			woe.setObjectId(objectId);
+			woe.setEntityType(METER_ENTITY_TYPE);
+			
+			String woeJson = "";
+			
+			try {
+				woeJson = om.writeValueAsString(woe);
+			} catch (Exception e) {
+				return new Result(false, null, e.getMessage());
+			}		
+			
+			String woeResultString = cwWoRestInterface.createWorkOrderEntity(woeJson);
+			Result woeResult = null;
+			
+			try {
+				woeResult = om.readValue(woeResultString, Result.class);
+			} catch (Exception e) {
+				return new Result(false, null, e.getMessage());
+			}
+			
+			if (!woeResult.isSuccess()) {
+				return woeResult;
+			}			
+		}
+		
+		
+		// (4) Create Meter
+		
 		MeterHeader mh = workorder.getMeterHeader();
 		mh.setWorkOrderId(woId);
 		String mhJson = "";
@@ -109,6 +171,11 @@ public class CwMeterServiceBean implements CwMeterService {
 		return woResult;  
 	}
 	
+	/**
+	 * Note that this does <strong>not</strong> update WOE in CW since it is spec'd to only be done
+	 * via creation and if the creation results in an unattached WO, it must be manually attached in CW 
+	 * by the user.  Hence no update will attach an unattached WO.
+	 */
 	@Override
 	public Result updateWorkOrder(CcbCwWorkOrder workorder) {
 		Result validateResult = validateWorkOrder(workorder, false);

@@ -31,4 +31,12 @@ public interface CwWoRestInterface {
 	 * @return The Result as a JSON string
 	 */
 	String deleteWorkOrder(String workorderId);
+	
+	/**
+	 * Create a new work order entity in Cityworks.
+	 * 
+	 * @param workorderEntityJson The WorkOrderEntity to be created as a JSON string
+	 * @return The Result as a JSON string
+	 */
+	String createWorkOrderEntity(String workorderEntityJson);
 }
