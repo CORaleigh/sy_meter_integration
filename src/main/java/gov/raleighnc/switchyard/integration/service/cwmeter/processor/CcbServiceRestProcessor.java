@@ -371,44 +371,44 @@ public class CcbServiceRestProcessor implements Processor {
 	        sb.append("</meterReadInformation>");
 	        
 	        // check if device test performed then populate accordingly
-	        if (ccbcw.getMeterHeader().getInstallMeter() != null 
-        		&& ccbcw.getMeterHeader().getInstallMeter().getDeviceTest() != null 
-        		&& ccbcw.getMeterHeader().getInstallMeter().isPerformDeviceTest()) {
+	        if (ccbcw.getMeterHeader().getCurrentMeter() != null 
+        		&& ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest() != null 
+        		&& ccbcw.getMeterHeader().getCurrentMeter().isPerformDeviceTest()) {
 		        	sb.append("<deviceTestInformation>");
 				        sb.append("<deviceTestResult>");
-				        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getTestStatus().getCode());
+				        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getTestStatus().getCode());
 				        sb.append("</deviceTestResult>");  
 				        sb.append("<deviceTest>");
 					        sb.append("<sequence>");
 					        sb.append("10");        
 					        sb.append("</sequence>");    
 					        sb.append("<readingBefore>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister1Before().getReading());
-					        if (ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before() != null && 
-					        		ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getReading() > 0) {
+					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1Before().getReading());
+					        if (ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before() != null && 
+					        		ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getReading() > 0) {
 					        	sb.append(", ");
-					        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister2Before().getReading());
+					        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2Before().getReading());
 					        }
 					        sb.append("</readingBefore>");		        
 					        sb.append("<lowFlowAccuracy>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getLowAccuracy());        
+					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getLowAccuracy());        
 					        sb.append("</lowFlowAccuracy>");		        			        
 					        sb.append("<midFlowAccuracy>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getMidAccuracy());        
+					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getMidAccuracy());        
 					        sb.append("</midFlowAccuracy>");			        
 					        sb.append("<highFlowAccuracy>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getHighAccuracy());        
+					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getHighAccuracy());        
 					        sb.append("</highFlowAccuracy>");	
 					        sb.append("<readingAfter>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister1After().getReading());      
-					        if (ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After() != null && 
-					        		ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getReading() > 0) {
+					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister1After().getReading());      
+					        if (ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After() != null && 
+					        		ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getReading() > 0) {
 					        	sb.append(", ");
-					        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getRegister2After().getReading());
+					        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getRegister2After().getReading());
 					        }
 					        sb.append("</readingAfter>");			        
 					        sb.append("<notes>");
-					        sb.append(ccbcw.getMeterHeader().getInstallMeter().getDeviceTest().getNotes());        
+					        sb.append(ccbcw.getMeterHeader().getCurrentMeter().getDeviceTest().getNotes());        
 					        sb.append("</notes>");			        
 				        sb.append("</deviceTest>");
 			        sb.append("</deviceTestInformation>");
