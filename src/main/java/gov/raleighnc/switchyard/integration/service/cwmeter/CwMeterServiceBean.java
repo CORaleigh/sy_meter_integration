@@ -36,6 +36,8 @@ public class CwMeterServiceBean implements CwMeterService {
 	private ObjectMapper om;
 	
 	private final static String METER_ENTITY_TYPE = "WSERVICECONNECTION";
+	private final static String CCBSPID_WHERE = "where=CCBSPID=";
+	private final static String CCBSPID_FIELDS = "&outFields=objectid,facilityid&f=json";
 	
 	/**
 	 * Default no-arg constructor
@@ -88,17 +90,20 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		// (2) check to see if facility id already exists for SP ID
 		
-		String payload = "where=CCBSPID=" + spId + "&outFields=objectid,facilityid&f=json";
+		String payload = CCBSPID_WHERE + spId + CCBSPID_FIELDS;
 		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(payload);
 		int objectId = 0;
 		String facilityId = null;
-		System.out.println("spIdResultJson = " + spIdResultJson);
 		
 		try {
-			JsonNode rootNode = om.readValue(spIdResultJson, JsonNode.class);
-			
-			objectId = rootNode.path("features").path("attributes").path("OBJECTID").intValue();
-			facilityId = rootNode.path("features").path("attributes").path("FACILITYID").textValue();
+			JsonNode rootNode = om.readValue(spIdResultJson, JsonNode.class); 
+			JsonNode features = rootNode.path("features");  // features is an array in the returned JSON
+
+			// just need to get 1st element from features
+			if (features != null && features.get(0) != null && features.get(0).path("attributes") != null) { 
+				objectId = features.get(0).path("attributes").path("OBJECTID").intValue();
+				facilityId  = features.get(0).path("attributes").path("FACILITYID").textValue();
+			}
 		} catch (Exception e) {
 			return new Result(false, "Issues retrieving object and facility ids for SP ID = " + spId, e.getMessage());
 		}
