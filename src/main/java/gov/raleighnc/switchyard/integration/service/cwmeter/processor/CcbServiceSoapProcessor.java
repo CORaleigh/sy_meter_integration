@@ -23,6 +23,11 @@ import org.xml.sax.InputSource;
  */
 @Named("ccbServiceSoapProcessor")
 public class CcbServiceSoapProcessor implements Processor {
+	private static final String FALSE_STATUS = "<ResponseStatus>F</ResponseStatus>";
+	private static final String RESPONSE_TEXT_START = "<ResponseText>";
+	private static final String RESPONSE_TEXT_END = "</ResponseText>";
+	private static final String TEXT = "Text:";
+	private static final String DESCRIPTION = "Description:";
 
     @Override
     public void process(Exchange exchange) throws Exception {   	
@@ -42,7 +47,20 @@ public class CcbServiceSoapProcessor implements Processor {
                 	break;
                 }
             }
-        } 
+        } else if (sr.contains(FALSE_STATUS) && sr.contains(RESPONSE_TEXT_START)) {
+        	result.setSuccess(false);
+        	
+        	int startMsgIndex = sr.indexOf(RESPONSE_TEXT_START) + RESPONSE_TEXT_START.length();
+        	int endMsgIndex = sr.indexOf(RESPONSE_TEXT_END);
+        	String newMsg = sr.substring(startMsgIndex, endMsgIndex).trim();
+        	
+        	 if (newMsg.contains(TEXT) && newMsg.contains(DESCRIPTION)) {
+       		 	int startIndex = newMsg.indexOf(TEXT) + TEXT.length();
+                int endIndex = newMsg.indexOf(DESCRIPTION);
+                String errorMsg = newMsg.substring(startIndex, endIndex).trim();
+                result.setException(errorMsg);
+        	 }
+        }
         
         exchange.getOut().setBody(result);
     }
