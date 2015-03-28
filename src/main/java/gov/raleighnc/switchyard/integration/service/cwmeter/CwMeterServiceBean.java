@@ -469,9 +469,7 @@ public class CwMeterServiceBean implements CwMeterService {
 				return new Result(false, null, "No register 1 information was provided");
 			} 
 			
-			if (reg1.getReadType() == null || reg1.getReadType().getCode() == null || reg1.getReadType().getCode().isEmpty()) {
-				return new Result(false, null, "No register 1 read type information provided");
-			} else {
+			if (!(reg1.getReadType() == null || reg1.getReadType().getCode() == null || reg1.getReadType().getCode().isEmpty())) {
 				String readType = cwMeterRestInterface.getReadType(reg1.getReadType().getCode());
 				
 				if (readType == null || readType.isEmpty()) {
@@ -485,9 +483,7 @@ public class CwMeterServiceBean implements CwMeterService {
 				}
 			}
 			
-			if (reg1.getMrSource() == null || reg1.getMrSource().getCode() == null || reg1.getMrSource().getCode().isEmpty()) {
-				return new Result(false, null, "No register 1 mr source information provided");
-			} else {
+			if (!(reg1.getMrSource() == null || reg1.getMrSource().getCode() == null || reg1.getMrSource().getCode().isEmpty())) {
 				String mrSource = cwMeterRestInterface.getMRSource(reg1.getMrSource().getCode());
 				
 				if (mrSource == null || mrSource.isEmpty()) {
@@ -524,9 +520,7 @@ public class CwMeterServiceBean implements CwMeterService {
 					return new Result(false, null, "No register 2 information was provided for the compound meter");
 				} 
 				
-				if (reg2.getReadType() == null || reg2.getReadType().getCode() == null || reg2.getReadType().getCode().isEmpty()) {
-					return new Result(false, null, "No register 2 read type information provided");
-				} else {
+				if (!(reg2.getReadType() == null || reg2.getReadType().getCode() == null || reg2.getReadType().getCode().isEmpty())) {
 					String readType = cwMeterRestInterface.getReadType(reg2.getReadType().getCode());
 					
 					if (readType == null || readType.isEmpty()) {
@@ -540,9 +534,7 @@ public class CwMeterServiceBean implements CwMeterService {
 					}
 				}
 				
-				if (reg2.getMrSource() == null || reg2.getMrSource().getCode() == null || reg2.getMrSource().getCode().isEmpty()) {
-					return new Result(false, null, "No register 2 mr source information provided");
-				} else {
+				if (!(reg2.getMrSource() == null || reg2.getMrSource().getCode() == null || reg2.getMrSource().getCode().isEmpty())) {
 					String mrSource = cwMeterRestInterface.getMRSource(reg2.getMrSource().getCode());
 					
 					if (mrSource == null || mrSource.isEmpty()) {

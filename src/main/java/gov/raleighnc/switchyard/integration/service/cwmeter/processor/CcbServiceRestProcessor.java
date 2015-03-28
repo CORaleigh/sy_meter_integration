@@ -203,18 +203,28 @@ public class CcbServiceRestProcessor implements Processor {
 			        sb.append("</readDateTime>");        
 			        sb.append("<readType>");  
 			        if (ccbcw.getMeterHeader().getFieldActivityType().getStep1().getAction().equals(IM) 
-			        	&& ccbcw.getMeterHeader().getInstallMeter() != null) {
+			        	&& ccbcw.getMeterHeader().getInstallMeter() != null
+			        	&& ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType() != null
+			        	&& ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType().getCode() != null) {
 			        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType().getCode());
 			        } else {
-			        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType().getCode());
+			        	if (ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType() != null && ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType().getCode() != null)
+			        	{
+			        		sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType().getCode());
+			        	}
 			        }
 			        sb.append("</readType>");       
 			        sb.append("<mrSource>");  
 			        if (ccbcw.getMeterHeader().getFieldActivityType().getStep1().getAction().equals(IM)
-		        		&& ccbcw.getMeterHeader().getInstallMeter() != null) {
+		        		&& ccbcw.getMeterHeader().getInstallMeter() != null 
+		        		&& ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource() != null
+		        		&& ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource().getCode() != null) {
 			        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource().getCode());
 			        } else {
-			        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource().getCode());
+			        	if (ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource() != null && ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource().getCode() != null)
+			        	{
+			        		sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource().getCode());
+			        	}
 			        }
 			        sb.append("</mrSource>");     
 			        sb.append("<useOnBill>");  
@@ -289,10 +299,16 @@ public class CcbServiceRestProcessor implements Processor {
 				        sb.append("");        
 				        sb.append("</readDateTime>");        
 				        sb.append("<readType>");  
-			        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType().getCode());
+				        if (ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType() != null && ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType().getCode() != null)
+				        {
+				        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getReadType().getCode());
+				        }
 				        sb.append("</readType>");       
 				        sb.append("<mrSource>");  
-			        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource().getCode());
+				        if (ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource() != null && ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource().getCode() != null)
+				        {
+				        	sb.append(ccbcw.getMeterHeader().getCurrentMeter().getRegister1().getMrSource().getCode());
+				        }
 				        sb.append("</mrSource>");     
 				        sb.append("<useOnBill>");  
 				        sb.append("true");        
@@ -343,10 +359,16 @@ public class CcbServiceRestProcessor implements Processor {
 				        sb.append("");        
 				        sb.append("</readDateTime>");        
 				        sb.append("<readType>");  
-			        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType().getCode());
+				        if (ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType() != null && ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType().getCode() != null)
+				        {
+				        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getReadType().getCode());
+				        }
 				        sb.append("</readType>");       
 				        sb.append("<mrSource>");  
-			        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource().getCode());
+				        if (ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource() != null && ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource().getCode() != null)
+				        {
+				        	sb.append(ccbcw.getMeterHeader().getInstallMeter().getRegister1().getMrSource().getCode());
+				        }
 				        sb.append("</mrSource>");     
 				        sb.append("<useOnBill>");  
 				        sb.append("true");        
