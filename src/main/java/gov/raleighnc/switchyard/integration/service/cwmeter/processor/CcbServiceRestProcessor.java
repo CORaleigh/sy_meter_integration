@@ -287,7 +287,8 @@ public class CcbServiceRestProcessor implements Processor {
 		        sb.append("</meterRead>"); 
 		        
 		        // step 2 (RM)
-		        if (ccbcw.getMeterHeader().getFieldActivityType().getStep2().getAction() != null 
+		        if (ccbcw.getMeterHeader().getFieldActivityType().getStep2() != null
+	        		&& ccbcw.getMeterHeader().getFieldActivityType().getStep2().getAction() != null 
 		        	&& ccbcw.getMeterHeader().getFieldActivityType().getStep2().getAction().equals(RM)
 	        		&& ccbcw.getMeterHeader().getCurrentMeter().isRemoveMeter()) {
 		        		
@@ -346,7 +347,8 @@ public class CcbServiceRestProcessor implements Processor {
 		        }
 		        
 		        // step 3 (IM)
-		        if (ccbcw.getMeterHeader().getFieldActivityType().getStep3().getAction() != null 
+		        if (ccbcw.getMeterHeader().getFieldActivityType().getStep3() != null
+		        	&& ccbcw.getMeterHeader().getFieldActivityType().getStep3().getAction() != null 
 		        	&& ccbcw.getMeterHeader().getFieldActivityType().getStep3().getAction().equals(IM)
 	        		&& ccbcw.getMeterHeader().getInstallMeter() != null
 	        		&& ccbcw.getMeterHeader().getInstallMeter().getBadgeNumber() > 0) {
