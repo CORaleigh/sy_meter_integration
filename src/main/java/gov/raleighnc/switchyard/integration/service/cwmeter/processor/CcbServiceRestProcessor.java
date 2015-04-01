@@ -113,7 +113,7 @@ public class CcbServiceRestProcessor implements Processor {
 	private static final String IM = "IM";
 	private static final String RM = "RM";
 	
-	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-hh.mm.ss");  // ccb timestamp format 
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss");  // ccb timestamp format 
 	
 	/**
 	 * Helper method to return blank values for long values that are 0
