@@ -20,6 +20,36 @@ import javax.ws.rs.Produces;
 	"CustomerName" : "Chad",
 	"CustomerPhone" : "123-456-7890",
 	"LifeSupport" : "true",
+	"OriginalMeter" : {
+		"MeterId" : "12345678",
+		"BadgeNumber" : "87654321",
+		"RemoveMeter" : "true",
+		"IsDeviceTest" : "true",
+		"CompoundMtr" : "true",
+		"ReadDateTime" : null,
+		"Size" : {"Code" : "C"},
+		"Register1" : {
+			"Reading" : "350",
+			"Dials" : "3",
+			"Miu" : "87654321",
+			"ReadType" : {"Code" : "70"},
+			"MrSource" : {"Code" : "MTR-BROKEN"},
+			"Size" : {"Code" : "C"},
+			"LowReadThreshold" : "4500",
+			"HighReadThreshold" : "4800"
+		},
+		"Register2" : {
+			"Reading" : "400",
+			"Dials" : "2",
+			"Miu" : "11223344",
+			"ReadType" : {"Code" : "20"},
+			"MrSource" : {"Code" : "UB-CATCH"},
+			"Size" : {"Code" : "C"},
+			"LowReadThreshold" : "4600",
+			"HighReadThreshold" : "5000"
+		},
+		"DeviceTest" : null
+	},
 	"CurrentMeter" : {
 		"MeterId" : "12345678",
 		"BadgeNumber" : "87654321",

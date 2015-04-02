@@ -139,7 +139,6 @@ public class CwMeterServiceBean implements CwMeterService {
 			}			
 		}
 		
-		
 		// (4) Create Meter
 		
 		MeterHeader mh = workorder.getMeterHeader();
@@ -436,8 +435,138 @@ public class CwMeterServiceBean implements CwMeterService {
 					return new Result(false, null, e.getMessage());
 				}
 			}
-		}		
+		}	
 		
+		
+
+		if (mh.getOriginalMeter() != null) {
+			if (mh.getOriginalMeter().getMeterId() <= 0) {
+				return new Result(false, null, "Invalid or no original meter id provided");
+			}
+			
+			if (mh.getOriginalMeter().getBadgeNumber() <= 0) {
+				return new Result(false, null, "Invalid or no original meter badge number provided");
+			}			
+			
+			if (mh.getOriginalMeter().getSize() == null || mh.getOriginalMeter().getSize().getCode() == null || mh.getOriginalMeter().getSize().getCode().isEmpty()) {
+				return new Result(false, null, "Invalid or no original meter size provided");
+			} else {
+				String size = cwMeterRestInterface.getSize(mh.getOriginalMeter().getSize().getCode());
+				
+				if (size == null || size.isEmpty()) {
+					return new Result(false, null, "Invalid original meter size provided");
+				} else {
+					try {
+						mh.getOriginalMeter().setSize(om.readValue(size, CodeDescription.class));
+					} catch (Exception e) {
+						return new Result(false, null, e.getMessage());
+					}
+				}
+			}
+			
+			Register reg1 = mh.getOriginalMeter().getRegister1();
+			
+			if (reg1 == null) {
+				return new Result(false, null, "No original meter register 1 information was provided");
+			} 
+			
+			if (!(reg1.getReadType() == null || reg1.getReadType().getCode() == null || reg1.getReadType().getCode().isEmpty())) {
+				String readType = cwMeterRestInterface.getReadType(reg1.getReadType().getCode());
+				
+				if (readType == null || readType.isEmpty()) {
+					return new Result(false, null, "Invalid original meter register 1 read type provided");
+				} else {
+					try {
+						reg1.setReadType(om.readValue(readType, CodeDescription.class));
+					} catch (Exception e) {
+						return new Result(false, null, e.getMessage());
+					}
+				}
+			}
+			
+			if (!(reg1.getMrSource() == null || reg1.getMrSource().getCode() == null || reg1.getMrSource().getCode().isEmpty())) {
+				String mrSource = cwMeterRestInterface.getMRSource(reg1.getMrSource().getCode());
+				
+				if (mrSource == null || mrSource.isEmpty()) {
+					return new Result(false, null, "Invalid original meter register 1 mr source provided");
+				} else {
+					try {
+						reg1.setMrSource(om.readValue(mrSource, CodeDescription.class));
+					} catch (Exception e) {
+						return new Result(false, null, e.getMessage());
+					}
+				}
+			}	
+			
+			if (reg1.getSize() == null || reg1.getSize().getCode() == null || reg1.getSize().getCode().isEmpty()) {
+				return new Result(false, null, "Invalid or no original meter register 1 size provided");
+			} else {
+				String size = cwMeterRestInterface.getSize(reg1.getSize().getCode());
+				
+				if (size == null || size.isEmpty()) {
+					return new Result(false, null, "Invalid original meter register 1 size provided");
+				} else {
+					try {
+						reg1.setSize(om.readValue(size, CodeDescription.class));
+					} catch (Exception e) {
+						return new Result(false, null, e.getMessage());
+					}
+				}
+			}			
+			
+			if (mh.getOriginalMeter().isCompoundMeter()) {
+				Register reg2 = mh.getOriginalMeter().getRegister2();
+				
+				if (reg2 == null) {
+					return new Result(false, null, "No original meter register 2 information was provided for the compound meter");
+				} 
+				
+				if (!(reg2.getReadType() == null || reg2.getReadType().getCode() == null || reg2.getReadType().getCode().isEmpty())) {
+					String readType = cwMeterRestInterface.getReadType(reg2.getReadType().getCode());
+					
+					if (readType == null || readType.isEmpty()) {
+						return new Result(false, null, "Invalid original meter register 2 read type provided");
+					} else {
+						try {
+							reg2.setReadType(om.readValue(readType, CodeDescription.class));
+						} catch (Exception e) {
+							return new Result(false, null, e.getMessage());
+						}
+					}
+				}
+				
+				if (!(reg2.getMrSource() == null || reg2.getMrSource().getCode() == null || reg2.getMrSource().getCode().isEmpty())) {
+					String mrSource = cwMeterRestInterface.getMRSource(reg2.getMrSource().getCode());
+					
+					if (mrSource == null || mrSource.isEmpty()) {
+						return new Result(false, null, "Invalid original meter register 2 mr source provided");
+					} else {
+						try {
+							reg2.setMrSource(om.readValue(mrSource, CodeDescription.class));
+						} catch (Exception e) {
+							return new Result(false, null, e.getMessage());
+						}
+					}
+				}	
+				
+				if (reg2.getSize() == null || reg2.getSize().getCode() == null || reg2.getSize().getCode().isEmpty()) {
+					return new Result(false, null, "Invalid or no original meter register 2 size provided");
+				} else {
+					String size = cwMeterRestInterface.getSize(reg2.getSize().getCode());
+					
+					if (size == null || size.isEmpty()) {
+						return new Result(false, null, "Invalid original meter register 2 size provided");
+					} else {
+						try {
+							reg2.setSize(om.readValue(size, CodeDescription.class));
+						} catch (Exception e) {
+							return new Result(false, null, e.getMessage());
+						}
+					}
+				}					
+			}
+		} 		
+			
 		if (mh.getCurrentMeter() != null) {
 			if (mh.getCurrentMeter().getMeterId() <= 0) {
 				return new Result(false, null, "Invalid or no current meter id provided");
