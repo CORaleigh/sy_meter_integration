@@ -16,6 +16,7 @@ import gov.raleighnc.switchyard.integration.domain.ccb.meter.FieldActivityType;
 import gov.raleighnc.switchyard.integration.domain.ccb.meter.MeterHeader;
 import gov.raleighnc.switchyard.integration.domain.ccb.meter.Register;
 import gov.raleighnc.switchyard.integration.domain.cityworks.workorder.WorkOrder;
+import gov.raleighnc.switchyard.integration.domain.cityworks.workorder.WorkOrderCustomField;
 import gov.raleighnc.switchyard.integration.domain.cityworks.workorder.WorkOrderEntity;
 
 @Service(CwMeterService.class)
@@ -38,6 +39,14 @@ public class CwMeterServiceBean implements CwMeterService {
 	private final static String METER_ENTITY_TYPE = "WSERVICECONNECTION";
 	private final static String CCBSPID_WHERE = "where=CCBSPID=";
 	private final static String CCBSPID_FIELDS = "&outFields=objectid,facilityid&f=json";
+	private final static String METER_CATEGORY_NAME = "METER SEARCHABLE";
+	private final static String CF_DISPATCH_GROUP = "DISPATCH GROUP:";
+	private final static String CF_FA_TYPE = "FA TYPE:";
+	private final static String CF_POSTAL = "ZIP CODE:";
+	private final static String CF_ROUTE = "ROUTE:";
+	private final static String CF_USE_CLASS = "FIELD SERVICE CLASS:";
+	private final static String CF_ROUTE_START = "ROUTE SEQUENCE START:";
+	private final static String CF_ROUTE_END = "ROUTE SEQUENCE END:";
 	
 	/**
 	 * Default no-arg constructor
@@ -46,6 +55,104 @@ public class CwMeterServiceBean implements CwMeterService {
 		om = new ObjectMapper();
 		om.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	}
+	
+	/**
+	 * Helper method to get custom field id from category name and custom field name.
+	 * 
+	 * @param categoryName
+	 * @param customFieldName
+	 * @return
+	 */
+	protected Result getCustFieldId(String categoryName, String customFieldName) 
+	{
+		WorkOrderCustomField wocf = new WorkOrderCustomField();
+		wocf.setCategoryName(categoryName);
+		wocf.setCustFieldName(customFieldName);
+		String cfJson = "";
+		
+		try {
+			cfJson = om.writeValueAsString(wocf);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		String cfResultString = cwWoRestInterface.retrieveCustomFieldId(cfJson);
+		
+		Result cfResult = null;
+		
+		try {
+			cfResult = om.readValue(cfResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		return cfResult;
+	}
+	
+	/**
+	 * Helper method to get category id from category name.
+	 * 
+	 * @param categoryName
+	 * @return
+	 */
+	protected Result getCategoryId(String categoryName) 
+	{
+		WorkOrderCustomField wocf = new WorkOrderCustomField();
+		wocf.setCategoryName(categoryName);
+		String cfJson = "";
+		
+		try {
+			cfJson = om.writeValueAsString(wocf);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		String cfResultString = cwWoRestInterface.retrieveCategoryId(cfJson);
+		
+		Result cfResult = null;
+		
+		try {
+			cfResult = om.readValue(cfResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		return cfResult;
+	}	
+	
+	/**
+	 * Helper method to create custom field for the work order.
+	 * 
+	 * @param woId
+	 * @param custFieldId
+	 * @param custFieldName
+	 * @param custFieldValue
+	 * @return
+	 */
+	protected Result createCustomfField(String woId, int custFieldId, String custFieldName, String custFieldValue)
+	{
+		WorkOrderCustomField wocf = new WorkOrderCustomField();
+		
+		wocf.setCustFieldId(custFieldId);
+		wocf.setWorkOrderId(woId);
+		wocf.setCustFieldName(custFieldName);
+		wocf.setCustFieldValue(custFieldValue);
+		String cfJson = "";
+		
+		try {
+			cfJson = om.writeValueAsString(wocf);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		String cfResultString = cwWoRestInterface.createWorkOrderCustomField(cfJson);
+		Result cfResult = null;
+		
+		try {
+			cfResult = om.readValue(cfResultString, Result.class);
+		} catch (Exception e) {
+			return new Result(false, null, e.getMessage());
+		}
+		
+		return cfResult;
 	}
 	
 	@Override
@@ -64,6 +171,14 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		// requirement is to set text1 of WO in CW to the SP ID value
 		wo.setText1(spId);
+		
+		// grab category id and set it to work order
+		Result cnResult = getCategoryId(METER_CATEGORY_NAME);
+		if (!cnResult.isSuccess())
+		{
+			return cnResult;
+		}
+		wo.setWoCustFieldCatId(Integer.parseInt(cnResult.getMessage()));
 		
 		String woJson = "";
 		
@@ -88,7 +203,94 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		String woId = woResult.getMessage();
 		
-		// (2) check to see if facility id already exists for SP ID
+
+		// (2) create WO custom fields in CW
+		
+		// FA TYPE
+		Result cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_FA_TYPE);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_FA_TYPE, workorder.getMeterHeader().getFieldActivityType().getCode());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		
+		// POSTAL CODE
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_POSTAL);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_POSTAL, workorder.getMeterHeader().getPostal());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		
+		// DISPATCH GROUP
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_DISPATCH_GROUP);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_DISPATCH_GROUP, workorder.getMeterHeader().getDispatchGroup());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}		
+		
+		// FIELD SERVICE CLASS
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_USE_CLASS);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_USE_CLASS, workorder.getMeterHeader().getUseClass());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 
+		
+		// ROUTE
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_ROUTE);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE, workorder.getMeterHeader().getRoute());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 
+		
+		// ROUTE SEQ START
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_ROUTE_START);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_START, workorder.getMeterHeader().getRouteSeqStart());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 		
+		
+		// ROUTE SEQ END
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_ROUTE_END);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_END, workorder.getMeterHeader().getRouteSeqEnd());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 			
+		
+		// (3) check to see if facility id already exists for SP ID
 		
 		String payload = CCBSPID_WHERE + spId + CCBSPID_FIELDS;
 		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(payload);
@@ -108,7 +310,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			return new Result(false, "Issues retrieving object and facility ids for SP ID = " + spId, e.getMessage());
 		}
 		
-		// (3) if both object id and facility id have values from ArcGIS, push this into WOE so it will become attached in CW
+		// (4) if both object id and facility id have values from ArcGIS, push this into WOE so it will become attached in CW
 		// if nothing is returned for either value, just skip this section and hence WO will be unattached
 		if (objectId > 0 && facilityId != null && !facilityId.isEmpty()) {
 			WorkOrderEntity woe = new WorkOrderEntity();
@@ -139,7 +341,7 @@ public class CwMeterServiceBean implements CwMeterService {
 			}			
 		}
 		
-		// (4) Create Meter
+		// (5) Create Meter
 		
 		MeterHeader mh = workorder.getMeterHeader();
 		mh.setWorkOrderId(woId);
