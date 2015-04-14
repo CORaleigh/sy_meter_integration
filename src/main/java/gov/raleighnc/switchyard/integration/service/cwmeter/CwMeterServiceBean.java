@@ -120,7 +120,7 @@ public class CwMeterServiceBean implements CwMeterService {
 	}	
 	
 	/**
-	 * Helper method to create custom field for the work order.
+	 * Helper method to update custom field for the work order.
 	 * 
 	 * @param woId
 	 * @param custFieldId
@@ -128,7 +128,7 @@ public class CwMeterServiceBean implements CwMeterService {
 	 * @param custFieldValue
 	 * @return
 	 */
-	protected Result createCustomfField(String woId, int custFieldId, String custFieldName, String custFieldValue)
+	protected Result updateCustomField(String woId, int custFieldId, String custFieldName, String custFieldValue)
 	{
 		WorkOrderCustomField wocf = new WorkOrderCustomField();
 		
@@ -143,7 +143,8 @@ public class CwMeterServiceBean implements CwMeterService {
 		} catch (Exception e) {
 			return new Result(false, null, e.getMessage());
 		}
-		String cfResultString = cwWoRestInterface.createWorkOrderCustomField(cfJson);
+
+		String cfResultString = cwWoRestInterface.updateWorkOrderCustomField(cfJson);
 		Result cfResult = null;
 		
 		try {
@@ -212,7 +213,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_FA_TYPE, workorder.getMeterHeader().getFieldActivityType().getCode());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_FA_TYPE, workorder.getMeterHeader().getFieldActivityType().getDescription());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
@@ -224,7 +225,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_POSTAL, workorder.getMeterHeader().getPostal());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_POSTAL, workorder.getMeterHeader().getPostal());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
@@ -236,7 +237,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_DISPATCH_GROUP, workorder.getMeterHeader().getDispatchGroup());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_DISPATCH_GROUP, workorder.getMeterHeader().getDispatchGroup());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
@@ -248,7 +249,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_USE_CLASS, workorder.getMeterHeader().getUseClass());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_USE_CLASS, workorder.getMeterHeader().getUseClass());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
@@ -260,7 +261,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE, workorder.getMeterHeader().getRoute());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE, workorder.getMeterHeader().getRoute());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
@@ -272,7 +273,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_START, workorder.getMeterHeader().getRouteSeqStart());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_START, workorder.getMeterHeader().getRouteSeqStart());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
@@ -284,7 +285,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		{
 			return cfResult;
 		}
-		cfResult = createCustomfField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_END, workorder.getMeterHeader().getRouteSeqEnd());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_END, workorder.getMeterHeader().getRouteSeqEnd());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;

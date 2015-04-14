@@ -49,6 +49,14 @@ public interface CwWoRestInterface {
 	String createWorkOrderCustomField(String wocfJson);
 	
     /**
+     * Updates a custom field entry in the Cityworks.
+     * 
+     * @param wocfJson The WorkOrderCustomField to be updated as a JSON string
+     * @return The Result as a JSON string
+     */
+	String updateWorkOrderCustomField(String wocfJson);	
+	
+    /**
      * Retrieve a custom field id.
      * 
      * @param wocf The WorkOrderCustomField

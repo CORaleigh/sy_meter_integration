@@ -45,6 +45,12 @@ public interface CwWoRestInterfaceJaxRs {
     String createWorkOrderCustomField(String wocfJson);     
     
     @POST
+    @Path("/updatewocf")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String updateWorkOrderCustomField(String wocfJson);         
+    
+    @POST
     @Path("/getcustfieldid")
     @Consumes({"application/json", "application/xml"})
     @Produces({"application/json", "application/xml"})
