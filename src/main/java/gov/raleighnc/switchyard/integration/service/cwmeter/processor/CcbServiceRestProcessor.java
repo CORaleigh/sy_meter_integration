@@ -90,6 +90,21 @@ import org.apache.camel.Processor;
 
     </meterReadInformation>  
 
+	<characteristic> <!-- if adjustment / fees exists  -->
+		<characteristicType>NO_TODO</characteristicType>
+		<characteristicValue>YES</characteristicValue>
+	</characteristic>
+
+	<characteristic> <!-- if letters exists  -->
+		<characteristicType>NO_TODO</characteristicType>
+		<characteristicValue>YES</characteristicValue>
+	</characteristic>
+
+	<characteristic> <!-- if todos / alerts exists  -->
+		<characteristicType>NO_TODO</characteristicType>
+		<characteristicValue>YES</characteristicValue>
+	</characteristic>
+
     <deviceTestInformation>  
 		<deviceTestResult>[TestStatus]</deviceTestResult>
 		<deviceTest>
@@ -407,6 +422,51 @@ public class CcbServiceRestProcessor implements Processor {
 			        sb.append("</meterRead>"); 		    
 		        }
 	        sb.append("</meterReadInformation>");
+	        
+	        // check adjustment / fees
+	        if (ccbcw.getMeterHeader().getAdjustmentType() != null && ccbcw.getMeterHeader().getAdjustmentType().getCode() != null 
+        		&& !ccbcw.getMeterHeader().getAdjustmentType().getCode().isEmpty() && ccbcw.getMeterHeader().getAdjustmentValue() != null
+        		&& ccbcw.getMeterHeader().getAdjustmentValue().getCode() != null && !ccbcw.getMeterHeader().getAdjustmentValue().getCode().isEmpty())
+	        {
+	        	sb.append("<characteristic>");
+	        		sb.append("<characteristicType>");
+	        			sb.append(ccbcw.getMeterHeader().getAdjustmentType().getCode());
+	        		sb.append("</characteristicType>");
+	        		sb.append("<characteristicValue>");
+        				sb.append(ccbcw.getMeterHeader().getAdjustmentValue().getCode());
+    				sb.append("</characteristicValue>");	        		
+	        	sb.append("</characteristic>");
+	        }
+	        
+	        // check letters
+	        if (ccbcw.getMeterHeader().getLetterType() != null && ccbcw.getMeterHeader().getLetterType().getCode() != null 
+        		&& !ccbcw.getMeterHeader().getLetterType().getCode().isEmpty() && ccbcw.getMeterHeader().getLetterValue() != null
+        		&& ccbcw.getMeterHeader().getLetterValue().getCode() != null && !ccbcw.getMeterHeader().getLetterValue().getCode().isEmpty())
+	        {
+	        	sb.append("<characteristic>");
+	        		sb.append("<characteristicType>");
+	        			sb.append(ccbcw.getMeterHeader().getLetterType().getCode());
+	        		sb.append("</characteristicType>");
+	        		sb.append("<characteristicValue>");
+        				sb.append(ccbcw.getMeterHeader().getLetterValue().getCode());
+    				sb.append("</characteristicValue>");	        		
+	        	sb.append("</characteristic>");
+	        }
+	        
+	        // check todos / alerts
+	        if (ccbcw.getMeterHeader().getToDoType() != null && ccbcw.getMeterHeader().getToDoType().getCode() != null 
+        		&& !ccbcw.getMeterHeader().getToDoType().getCode().isEmpty() && ccbcw.getMeterHeader().getToDoValue() != null
+        		&& ccbcw.getMeterHeader().getToDoValue().getCode() != null && !ccbcw.getMeterHeader().getToDoValue().getCode().isEmpty())
+	        {
+	        	sb.append("<characteristic>");
+	        		sb.append("<characteristicType>");
+	        			sb.append(ccbcw.getMeterHeader().getToDoType().getCode());
+	        		sb.append("</characteristicType>");
+	        		sb.append("<characteristicValue>");
+        				sb.append(ccbcw.getMeterHeader().getToDoValue().getCode());
+    				sb.append("</characteristicValue>");	        		
+	        	sb.append("</characteristic>");
+	        }	        
 	        
 	        // check if device test performed then populate accordingly
 	        if (ccbcw.getMeterHeader().getCurrentMeter() != null 
