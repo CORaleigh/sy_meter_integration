@@ -39,14 +39,13 @@ public class CwMeterServiceBean implements CwMeterService {
 	private final static String METER_ENTITY_TYPE = "WSERVICECONNECTION";
 	private final static String CCBSPID_WHERE = "where=CCBSPID=";
 	private final static String CCBSPID_FIELDS = "&outFields=objectid,facilityid&f=json";
-	private final static String METER_CATEGORY_NAME = "METER SEARCHABLE";
-	private final static String CF_DISPATCH_GROUP = "DISPATCH GROUP:";
-	private final static String CF_FA_TYPE = "FA TYPE:";
-	private final static String CF_POSTAL = "ZIP CODE:";
-	private final static String CF_ROUTE = "ROUTE:";
-	private final static String CF_USE_CLASS = "FIELD SERVICE CLASS:";
-	private final static String CF_ROUTE_START = "ROUTE SEQUENCE START:";
-	private final static String CF_ROUTE_END = "ROUTE SEQUENCE END:";
+	private final static String METER_CATEGORY_NAME = "PU METER SEARCHABLE FIELDS";
+	private final static String CF_DISPATCH_GROUP = "DISPATCH GROUP";
+	private final static String CF_FA_TYPE = "FA TYPE";
+	private final static String CF_POSTAL = "ZIP CODE";
+	private final static String CF_ROUTE = "ROUTE";
+	private final static String CF_USE_CLASS = "FIELD SERVICE CLASS";
+	private final static String CF_METER_SIZE = "METER SIZE";
 	
 	/**
 	 * Default no-arg constructor
@@ -267,29 +266,17 @@ public class CwMeterServiceBean implements CwMeterService {
 			return cfResult;
 		} 
 		
-		// ROUTE SEQ START
-		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_ROUTE_START);
+		// METER SIZE
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_METER_SIZE);
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
 		}
-		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_START, workorder.getMeterHeader().getRouteSeqStart());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_METER_SIZE, workorder.getMeterHeader().getOriginalMeter().getSize().getDescription());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
 		} 		
-		
-		// ROUTE SEQ END
-		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_ROUTE_END);
-		if (!cfResult.isSuccess())
-		{
-			return cfResult;
-		}
-		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_ROUTE_END, workorder.getMeterHeader().getRouteSeqEnd());
-		if (!cfResult.isSuccess())
-		{
-			return cfResult;
-		} 			
 		
 		// (3) check to see if facility id already exists for SP ID
 		
