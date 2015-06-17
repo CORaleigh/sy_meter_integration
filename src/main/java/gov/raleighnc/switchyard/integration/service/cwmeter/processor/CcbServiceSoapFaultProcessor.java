@@ -27,7 +27,7 @@ public class CcbServiceSoapFaultProcessor implements Processor {
     	
     	// although get fault below, not used since the fault format coming in is invalid so it's parsed with null values
     	SOAPFaultInfo fault = exchange.getProperty(SOAPComposition.SOAP_FAULT_INFO, SOAPFaultInfo.class);
-    	
+    	    	
         Result result = new Result();
         result.setSuccess(false);
         String errorMessage = caused.getMessage();
@@ -37,15 +37,16 @@ public class CcbServiceSoapFaultProcessor implements Processor {
         	int startIndex = errorMessage.indexOf(TEXT) + TEXT.length();
             int endIndex = errorMessage.indexOf(DESCRIPTION);
             String errorMsg = errorMessage.substring(startIndex, endIndex).trim();
+            result.setException(errorMsg);
             
             // if error message happens to be because it was already closed, just return true to CW
             // so it can continue processing to close it's own CW WO 
             if (errorMsg.contains(ALREADY_CLOSED)) {
             	result.setSuccess(true);
-            	result.setMessage("Success although FA already closed: " + errorMsg);
+            	result.setMessage("Success although FA already closed");
             	// may want to log this somewhere
             } else {
-                result.setException(errorMsg);
+            	result.setMessage("There was an issue closing the FA in CC&B");
             }
         }
         
