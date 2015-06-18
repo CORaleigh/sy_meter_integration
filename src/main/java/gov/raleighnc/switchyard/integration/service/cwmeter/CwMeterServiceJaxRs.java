@@ -103,7 +103,11 @@ import javax.ws.rs.Produces;
 	"AdjustmentValue" : null,
 	"LetterValue" : null,
 	"ToDoValue" : null,
-	"WorkOrderId": null
+	"WorkOrderId": null,
+	"Route" : null,
+	"RouteSequenceStart" : null,
+	"RouteSequenceEnd" : null,
+	"FAClass" : null	
 },
 
 "WorkOrder" : {
