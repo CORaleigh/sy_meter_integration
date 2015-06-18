@@ -44,7 +44,7 @@ public class CwMeterServiceBean implements CwMeterService {
 	private final static String CF_FA_TYPE = "FA TYPE";
 	private final static String CF_POSTAL = "ZIP CODE";
 	private final static String CF_ROUTE = "ROUTE";
-	private final static String CF_USE_CLASS = "FIELD SERVICE CLASS";
+	private final static String CF_FA_CLASS = "FIELD SERVICE CLASS";
 	private final static String CF_METER_SIZE = "METER SIZE";
 	
 	/**
@@ -243,12 +243,12 @@ public class CwMeterServiceBean implements CwMeterService {
 		}		
 		
 		// FIELD SERVICE CLASS
-		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_USE_CLASS);
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_FA_CLASS);
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
 		}
-		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_USE_CLASS, workorder.getMeterHeader().getUseClass());
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_FA_CLASS, workorder.getMeterHeader().getFaClass());
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
