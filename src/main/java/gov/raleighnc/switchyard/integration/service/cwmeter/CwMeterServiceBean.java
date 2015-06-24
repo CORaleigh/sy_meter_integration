@@ -1,5 +1,8 @@
 package gov.raleighnc.switchyard.integration.service.cwmeter;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.switchyard.component.bean.Reference;
@@ -46,6 +49,9 @@ public class CwMeterServiceBean implements CwMeterService {
 	private final static String CF_ROUTE = "ROUTE";
 	private final static String CF_FA_CLASS = "FIELD SERVICE CLASS";
 	private final static String CF_METER_SIZE = "METER SIZE";
+	
+	private final static List<String> VALID_TEMPLATE_IDS = Arrays.asList("257700", "257701", "257702");
+	
 	
 	/**
 	 * Default no-arg constructor
@@ -330,39 +336,42 @@ public class CwMeterServiceBean implements CwMeterService {
 		}
 		
 		// (5) Create Meter
-		
-		MeterHeader mh = workorder.getMeterHeader();
-		mh.setWorkOrderId(woId);
-		String mhJson = "";
-		
-		try {
-			mhJson = om.writeValueAsString(mh);
-		} catch (Exception e) {
-			cwWoRestInterface.deleteWorkOrder(woId);
-			return new Result(false, null, e.getMessage());
+		// check to see if WO falls into one of the designated WO templates
+		if (wo.getWoTemplateId() != null && VALID_TEMPLATE_IDS.contains(wo.getWoTemplateId().trim()))
+		{
+			MeterHeader mh = workorder.getMeterHeader();
+			mh.setWorkOrderId(woId);
+			String mhJson = "";
+			
+			try {
+				mhJson = om.writeValueAsString(mh);
+			} catch (Exception e) {
+				cwWoRestInterface.deleteWorkOrder(woId);
+				return new Result(false, null, e.getMessage());
+			}
+					
+			String mhResultString = cwMeterRestInterface.createMeter(mhJson);
+			
+			// lowercase fieldnames
+			mhResultString = mhResultString.replaceAll("Success", "success");
+			mhResultString = mhResultString.replaceAll("Message", "message");
+			mhResultString = mhResultString.replaceAll("Exception", "exception");
+			
+			Result mhResult = null;
+			
+			try {
+				mhResult = om.readValue(mhResultString, Result.class);
+			} catch (Exception e) {
+				cwWoRestInterface.deleteWorkOrder(woId);
+				return new Result(false, null, e.getMessage());
+			}
+			
+			if (!mhResult.isSuccess()) {
+				cwWoRestInterface.deleteWorkOrder(woId);
+				return mhResult;
+			}		
 		}
 				
-		String mhResultString = cwMeterRestInterface.createMeter(mhJson);
-		
-		// lowercase fieldnames
-		mhResultString = mhResultString.replaceAll("Success", "success");
-		mhResultString = mhResultString.replaceAll("Message", "message");
-		mhResultString = mhResultString.replaceAll("Exception", "exception");
-		
-		Result mhResult = null;
-		
-		try {
-			mhResult = om.readValue(mhResultString, Result.class);
-		} catch (Exception e) {
-			cwWoRestInterface.deleteWorkOrder(woId);
-			return new Result(false, null, e.getMessage());
-		}
-		
-		if (!mhResult.isSuccess()) {
-			cwWoRestInterface.deleteWorkOrder(woId);
-			return mhResult;
-		}		
-		
 		// everything successful so return the successful woResult that contains the woId in the message
 		return woResult;  
 	}
@@ -411,34 +420,36 @@ public class CwMeterServiceBean implements CwMeterService {
 			return woResult;
 		}		
 		
-		mh.setWorkOrderId(wo.getWorkOrderId());
-		
-		String mhJson = "";
-		
-		try {
-			mhJson = om.writeValueAsString(mh);
-		} catch (Exception e) {
-			return new Result(false, null, e.getMessage());
+		if (wo.getWoTemplateId() != null && VALID_TEMPLATE_IDS.contains(wo.getWoTemplateId().trim())) {
+			mh.setWorkOrderId(wo.getWorkOrderId());
+			
+			String mhJson = "";
+			
+			try {
+				mhJson = om.writeValueAsString(mh);
+			} catch (Exception e) {
+				return new Result(false, null, e.getMessage());
+			}
+					
+			String mhResultString = cwMeterRestInterface.updateMeter(mhJson);
+			
+			// lowercase fieldnames
+			mhResultString = mhResultString.replaceAll("Success", "success");
+			mhResultString = mhResultString.replaceAll("Message", "message");
+			mhResultString = mhResultString.replaceAll("Exception", "exception");
+			
+			Result mhResult = null;
+			
+			try {
+				mhResult = om.readValue(mhResultString, Result.class);
+			} catch (Exception e) {
+				return new Result(false, null, e.getMessage());
+			}
+			
+			if (!mhResult.isSuccess()) {
+				return mhResult;
+			}
 		}
-				
-		String mhResultString = cwMeterRestInterface.updateMeter(mhJson);
-		
-		// lowercase fieldnames
-		mhResultString = mhResultString.replaceAll("Success", "success");
-		mhResultString = mhResultString.replaceAll("Message", "message");
-		mhResultString = mhResultString.replaceAll("Exception", "exception");
-		
-		Result mhResult = null;
-		
-		try {
-			mhResult = om.readValue(mhResultString, Result.class);
-		} catch (Exception e) {
-			return new Result(false, null, e.getMessage());
-		}
-		
-		if (!mhResult.isSuccess()) {
-			return mhResult;
-		}				
 		
 		return new Result(true, null, null);
 	}
