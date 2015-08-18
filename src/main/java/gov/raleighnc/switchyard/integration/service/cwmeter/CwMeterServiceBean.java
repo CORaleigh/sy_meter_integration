@@ -49,6 +49,10 @@ public class CwMeterServiceBean implements CwMeterService {
 	private final static String CF_ROUTE = "ROUTE";
 	private final static String CF_FA_CLASS = "FIELD SERVICE CLASS";
 	private final static String CF_METER_SIZE = "METER SIZE";
+	private final static String CF_BADGE_NUMBER = "METER BADGE";	
+	private final static String CF_SP_TYPE = "SP TYPE";
+	private final static String CF_INSTRUCTION = "INSTRUCTION";
+	private final static String CF_SP_LOCATION = "SP LOCATION";
 	
 	private final static List<String> VALID_TEMPLATE_IDS = Arrays.asList("257700", "257701", "257702");
 	
@@ -178,7 +182,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		// requirement is to set text1 of WO in CW to the SP ID value
 		wo.setText1(spId);
 		
-		// grab category id and set it to work order
+		// grab category id and set it to work order	
 		Result cnResult = getCategoryId(METER_CATEGORY_NAME);
 		if (!cnResult.isSuccess())
 		{
@@ -282,7 +286,55 @@ public class CwMeterServiceBean implements CwMeterService {
 		if (!cfResult.isSuccess())
 		{
 			return cfResult;
+		} 	
+		
+		// Badge Number
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_BADGE_NUMBER);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_BADGE_NUMBER, String.valueOf(workorder.getMeterHeader().getOriginalMeter().getBadgeNumber()));
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 					
+		
+		// SP Type
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_SP_TYPE);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_SP_TYPE, workorder.getMeterHeader().getSpType());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
 		} 		
+		
+		// Instruction
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_INSTRUCTION);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_INSTRUCTION, workorder.getMeterHeader().getFaInstructions());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 	
+		
+		// SP Location
+		cfResult = getCustFieldId(METER_CATEGORY_NAME, CF_SP_LOCATION);
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		}
+		cfResult = updateCustomField(woId, Integer.parseInt(cfResult.getMessage()), CF_SP_LOCATION, workorder.getMeterHeader().getSpLocationDetails());
+		if (!cfResult.isSuccess())
+		{
+			return cfResult;
+		} 			
 		
 		// (3) check to see if facility id already exists for SP ID
 		
@@ -334,7 +386,7 @@ public class CwMeterServiceBean implements CwMeterService {
 				return woeResult;
 			}			
 		}
-		
+
 		// (5) Create Meter
 		// check to see if WO falls into one of the designated WO templates
 		if (wo.getWoTemplateId() != null && VALID_TEMPLATE_IDS.contains(wo.getWoTemplateId().trim()))
