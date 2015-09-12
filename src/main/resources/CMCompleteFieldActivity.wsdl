@@ -236,7 +236,7 @@
                binding="xai:CMCompleteFieldActivitySoapBinding">
 
       <!-- give the binding a network address -->
-      <soap:address location="http://ccbdevapp2:9500/spl/XAIApp/xaiserver/CMCompleteFieldActivity"/>
+      <soap:address location="http://ccbuatapp1:6500/spl/XAIApp/xaiserver/CMCompleteFieldActivity"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

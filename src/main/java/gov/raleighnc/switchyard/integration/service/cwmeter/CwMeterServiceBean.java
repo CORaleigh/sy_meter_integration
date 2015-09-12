@@ -2,6 +2,7 @@ package gov.raleighnc.switchyard.integration.service.cwmeter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -339,7 +340,10 @@ public class CwMeterServiceBean implements CwMeterService {
 		// (3) check to see if facility id already exists for SP ID
 		
 		String payload = CCBSPID_WHERE + spId + CCBSPID_FIELDS;
+		System.out.println("GIS payload-------------------------------------------"  + payload);
 		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(payload);
+		// chf log out the spidResultJson to see if it got something from GIS
+		System.out.println("spidResultJson-------------------------------------------"  + spIdResultJson);
 		int objectId = 0;
 		String facilityId = null;
 		
