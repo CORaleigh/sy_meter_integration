@@ -40,7 +40,7 @@ public class CwMeterServiceBean implements CwMeterService {
 	private ObjectMapper om;
 	
 	private final static String METER_ENTITY_TYPE = "WSERVICECONNECTION";
-	private final static String CCBSPID_WHERE = "where=CCBSPID=";
+	private final static String CCBSPID_WHERE = "where=SP_ID=";
 	private final static String CCBSPID_FIELDS = "&outFields=objectid,facilityid&f=json";
 	private final static String METER_CATEGORY_NAME = "PU METER SEARCHABLE FIELDS";
 	private final static String CF_DISPATCH_GROUP = "DISPATCH GROUP";
@@ -338,7 +338,7 @@ public class CwMeterServiceBean implements CwMeterService {
 		
 		// (3) check to see if facility id already exists for SP ID
 		
-		String payload = CCBSPID_WHERE + spId + CCBSPID_FIELDS;
+		String payload = CCBSPID_WHERE + "'" + spId + "'" + CCBSPID_FIELDS;
 		String spIdResultJson = arcGisRestInterface.getFacilityIdAndObjectId(payload);
 		int objectId = 0;
 		String facilityId = null;
