@@ -362,8 +362,11 @@ public class CwMeterServiceBean implements CwMeterService {
 			WorkOrderEntity woe = new WorkOrderEntity();
 			woe.setWorkOrderId(woId);
 			woe.setEntityUid(facilityId);
-			woe.setObjectId(objectId);
+			woe.setFeatureUid(facilityId);
 			woe.setEntityType(METER_ENTITY_TYPE);
+			woe.setFeatureType(METER_ENTITY_TYPE);
+			
+			// note that object id will be grabbed directly from PWSYSID so GIS.objectID will not be used.
 			
 			String woeJson = "";
 			
