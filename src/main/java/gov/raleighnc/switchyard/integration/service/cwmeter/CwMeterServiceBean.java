@@ -365,6 +365,8 @@ public class CwMeterServiceBean implements CwMeterService {
 			woe.setFeatureUid(facilityId);
 			woe.setEntityType(METER_ENTITY_TYPE);
 			woe.setFeatureType(METER_ENTITY_TYPE);
+			woe.setFeatureId(objectId);
+			woe.setEntitySid(objectId);
 			
 			// note that object id will be grabbed directly from PWSYSID so GIS.objectID will not be used.
 			
