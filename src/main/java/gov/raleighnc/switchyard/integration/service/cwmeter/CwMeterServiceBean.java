@@ -39,7 +39,7 @@ public class CwMeterServiceBean implements CwMeterService {
 	
 	private ObjectMapper om;
 	
-	private final static String METER_ENTITY_TYPE = "WSERVICECONNECTION";
+	private final static String METER_ENTITY_TYPE = "VW_WSERVICE_CONNECTION";
 	private final static String CCBSPID_WHERE = "where=SP_ID=";
 	private final static String CCBSPID_FIELDS = "&outFields=objectid,facilityid&f=json";
 	private final static String METER_CATEGORY_NAME = "PU METER SEARCHABLE FIELDS";
