@@ -31,4 +31,34 @@ public interface CwWoRestInterfaceJaxRs {
     @Consumes({"application/json", "application/xml"})
     @Produces({"application/json", "application/xml"})
     String deleteWorkOrder(String workorderId);    
+    
+    @POST
+    @Path("/createwoe")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String createWorkOrderEntity(String workorderEntityJson); 
+    
+    @POST
+    @Path("/createwocf")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String createWorkOrderCustomField(String wocfJson);     
+    
+    @POST
+    @Path("/updatewocf")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String updateWorkOrderCustomField(String wocfJson);         
+    
+    @POST
+    @Path("/getcustfieldid")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String retrieveCustomFieldId(String wocfJson);
+    
+    @POST
+    @Path("/getcategoryid")
+    @Consumes({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml"})
+    String retrieveCategoryId(String wocfJson);     
 }

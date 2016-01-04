@@ -68,6 +68,9 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
     						((CcbCwWorkOrder)content).getMeterHeader().getFaRemark(),
     						((CcbCwWorkOrder)content).getMeterHeader().getSpSourceStatus(),
     						((CcbCwWorkOrder)content).getMeterHeader().getDisconnectLocation(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getDispatchGroup(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getSpId(),
+    						((CcbCwWorkOrder)content).getMeterHeader().getStockLocation(),
     						((CcbCwWorkOrder)content).getMeterHeader().getAdjustmentType(),
     						((CcbCwWorkOrder)content).getMeterHeader().getLetterType(),
     						((CcbCwWorkOrder)content).getMeterHeader().getToDoType(),
@@ -77,6 +80,7 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
     						// current meter
     						new Object[] {
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getMeterId(),
+								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().getBadgeNumber(),
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().isRemoveMeter(),
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().isPerformDeviceTest(),
 								((CcbCwWorkOrder)content).getMeterHeader().getCurrentMeter().isCompoundMeter(),
@@ -163,6 +167,7 @@ public class CwMeterServiceRestComposer extends RESTEasyMessageComposer {
     						// install meter
     						new Object[] {
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getMeterId(),
+								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().getBadgeNumber(),
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().isRemoveMeter(),
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().isPerformDeviceTest(),
 								((CcbCwWorkOrder)content).getMeterHeader().getInstallMeter().isCompoundMeter(),

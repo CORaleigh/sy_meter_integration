@@ -31,4 +31,44 @@ public interface CwWoRestInterface {
 	 * @return The Result as a JSON string
 	 */
 	String deleteWorkOrder(String workorderId);
+	
+	/**
+	 * Create a new work order entity in Cityworks.
+	 * 
+	 * @param workorderEntityJson The WorkOrderEntity to be created as a JSON string
+	 * @return The Result as a JSON string
+	 */
+	String createWorkOrderEntity(String workorderEntityJson);
+	
+    /**
+     * Creates a new custom field entry in the Cityworks.
+     * 
+     * @param wocfJson The WorkOrderCustomField to be created as a JSON string
+     * @return The Result as a JSON string
+     */
+	String createWorkOrderCustomField(String wocfJson);
+	
+    /**
+     * Updates a custom field entry in the Cityworks.
+     * 
+     * @param wocfJson The WorkOrderCustomField to be updated as a JSON string
+     * @return The Result as a JSON string
+     */
+	String updateWorkOrderCustomField(String wocfJson);	
+	
+    /**
+     * Retrieve a custom field id.
+     * 
+     * @param wocf The WorkOrderCustomField
+     * @return The Result as a JSON string
+     */
+	String retrieveCustomFieldId(String wocfJson);		
+	
+    /**
+     * Retrieve a category id.
+     * 
+     * @param wocf The WorkOrderCustomField
+     * @return The Result as a JSON string
+     */
+	String retrieveCategoryId(String wocfJson);		
 }
