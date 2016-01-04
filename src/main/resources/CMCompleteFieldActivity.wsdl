@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<!-- root element wsdl:definitions defines set of related services -->
+<wsdl:definitions name="CMCompleteFieldActivity"
+  targetNamespace="http://ouaf.oracle.com/spl/XAIXapp/xaiserver/CMCompleteFieldActivity"
+  xmlns:xai="http://ouaf.oracle.com/spl/XAIXapp/xaiserver/CMCompleteFieldActivity"
+  xmlns:xaixsd="http://ouaf.oracle.com/spl/XAIXapp/xaiserver/CMCompleteFieldActivity"
+  xmlns:schemans1="http://oracle.com/CMCompleteFieldActivity.xsd"
+  xmlns:schemans2="http://oracle.com/CMCompleteFieldActivity.xsd"
+  xmlns:ouaf="urn:oracle:ouaf"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <!-- wsdl:types encapsulates schema definitions of communication types;
+       here using xsd -->
+  <wsdl:types>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ouaf="urn:oracle:ouaf" targetNamespace="urn:oracle:ouaf" elementFormDefault="unqualified">
+          <xsd:element name="Fault">
+            <xsd:complexType>
+                <xsd:all>
+                    <xsd:element name="ResponseStatus" type="xsd:string"/>
+                    <xsd:element name="ResponseCode" type="xsd:int"/>
+                    <xsd:element name="ResponseText" type="xsd:string"/>
+                    <xsd:element name="ResponseData" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:attribute name="parm1" type="xsd:string"/>
+                            <xsd:attribute name="parm2" type="xsd:string"/>
+                            <xsd:attribute name="parm3" type="xsd:string"/>
+                            <xsd:attribute name="parm4" type="xsd:string"/>
+                            <xsd:attribute name="parm5" type="xsd:string"/>
+                            <xsd:attribute name="parm6" type="xsd:string"/>
+                            <xsd:attribute name="parm7" type="xsd:string"/>
+                            <xsd:attribute name="parm8" type="xsd:string"/>
+                            <xsd:attribute name="parm9" type="xsd:string"/>
+                            <xsd:attribute name="text" type="xsd:string"/>
+                            <xsd:attribute name="category" type="xsd:string"/>
+                            <xsd:attribute name="numParm" type="xsd:int"/>
+                            <xsd:attribute name="number" type="xsd:int"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                  </xsd:all>
+              </xsd:complexType>
+          </xsd:element>
+          <xsd:simpleType name="dateTime">
+            <xsd:restriction base="xsd:token">
+              <xsd:pattern value="[0-9]{4}-[0-1][0-9]-[0-3][0-9]-[0-2][0-9]:[0-6][0-9]:[0-6][0-9]"/>
+            </xsd:restriction>
+           </xsd:simpleType>
+           <xsd:simpleType name="date">
+            <xsd:restriction base="xsd:token">
+              <xsd:pattern value="[0-9]{4}-[0-1][0-9]-[0-3][0-9]"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="time">
+            <xsd:restriction base="xsd:token">
+              <xsd:pattern value="[0-2][0-9]:[0-6][0-9]:[0-6][0-9]"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+          <xsd:simpleType name="money">
+            <xsd:restriction base="xsd:decimal"/>
+          </xsd:simpleType>
+      </xsd:schema>
+      
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ouaf="urn:oracle:ouaf" targetNamespace="http://oracle.com/CMCompleteFieldActivity.xsd" elementFormDefault="qualified">
+  <xsd:import namespace="urn:oracle:ouaf"/>
+  <xsd:element name="CMCompleteFieldActivity">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="fieldActivityId" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="workOrderId" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="meterLocation" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="servicePointSourceStatus" minOccurs="0">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="C"/>
+              <xsd:enumeration value="D"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element name="servicePointDisconnectLocation" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="customerContactLogInformation" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="interfaceLogs" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="meterInstallDate" type="ouaf:dateTime" minOccurs="0"/>
+        <xsd:element name="fieldActivityRemarks" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="workDateTime" type="ouaf:dateTime" minOccurs="0"/>
+        <xsd:element name="workedBy" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="comments" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="meterReadInformation" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="meterRead" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="meterBadgeNumber" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="readDateTime" type="ouaf:dateTime" minOccurs="0"/>
+                    <xsd:element name="readType" minOccurs="0">
+                      <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                          <xsd:enumeration value="20"/>
+                          <xsd:enumeration value="30"/>
+                          <xsd:enumeration value="35"/>
+                          <xsd:enumeration value="40"/>
+                          <xsd:enumeration value="45"/>
+                          <xsd:enumeration value="50"/>
+                          <xsd:enumeration value="60"/>
+                          <xsd:enumeration value="70"/>
+                          <xsd:enumeration value="80"/>
+                        </xsd:restriction>
+                      </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element name="mrSource" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="useOnBill" type="xsd:boolean" minOccurs="0"/>
+                    <xsd:element name="onOff" minOccurs="0">
+                      <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                          <xsd:enumeration value="0"/>
+                          <xsd:enumeration value="1"/>
+                        </xsd:restriction>
+                      </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element name="registerRead" minOccurs="0" maxOccurs="unbounded">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="registerSequence" type="xsd:decimal" minOccurs="0"/>
+                          <xsd:element name="currentMeterRead" type="xsd:decimal" minOccurs="0"/>
+                          <xsd:element name="miu" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="deviceTestInformation" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="deviceTestResult" minOccurs="0">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="E"/>
+                    <xsd:enumeration value="F"/>
+                    <xsd:enumeration value="I"/>
+                    <xsd:enumeration value="P"/>
+                    <xsd:enumeration value="X"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+              <xsd:element name="deviceTest" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="sequence" type="xsd:decimal" minOccurs="0"/>
+                    <xsd:element name="readingBefore" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="lowFlowAccuracy" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="midFlowAccuracy" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="highFlowAccuracy" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="readingAfter" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="notes" type="xsd:string" minOccurs="0"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="stockLocation" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="faultStyle" type="xsd:string" fixed="wsdl" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
+
+  </wsdl:types>
+
+  <!-- wsdl:message elements describe potential transactions -->
+
+  <!-- request CMCompleteFieldActivityRequest is of type CMCompleteFieldActivity -->
+  <wsdl:message name="CMCompleteFieldActivityRequest">
+    <wsdl:part name="body" element="schemans1:CMCompleteFieldActivity"/>
+  </wsdl:message>
+
+  <!-- response CMCompleteFieldActivityResponse is of type CMCompleteFieldActivityResponse -->
+  <wsdl:message name="CMCompleteFieldActivityResponse">
+    <wsdl:part name="body" element="schemans2:CMCompleteFieldActivity"/>
+  </wsdl:message>
+
+<!-- fault CMCompleteFieldActivityFault is of type CMCompleteFieldActivityFault -->
+  <wsdl:message name="CMCompleteFieldActivityFault">
+    <wsdl:part name="fault" element="ouaf:Fault"/>
+  </wsdl:message>
+
+  <!-- wsdl:portType describes messages in an operation -->
+  <wsdl:portType name="CMCompleteFieldActivityPortType">
+    <!-- the value of wsdl:operation eludes me -->
+    <wsdl:operation name="CMCompleteFieldActivity">
+      <wsdl:input message="xai:CMCompleteFieldActivityRequest"/>
+      <wsdl:output message="xai:CMCompleteFieldActivityResponse"/>
+      <wsdl:fault name="fault" message="xai:CMCompleteFieldActivityFault"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <!-- wsdl:binding states a serialization protocol for this service -->
+  <wsdl:binding name="CMCompleteFieldActivitySoapBinding"
+                type="xai:CMCompleteFieldActivityPortType">
+    <!-- leverage off soap:binding document style @@@(no wsdl:foo pointing at
+         the soap binding) -->
+    <soap:binding style="document"
+                  transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <!-- semi-opaque container of network transport details classed by
+         soap:binding above @@@ -->
+    <wsdl:operation name="CMCompleteFieldActivity">
+
+      <!-- again bind to SOAP? @@@ -->
+      <soap:operation soapAction="http://ouaf.oracle.com/spl/XAIXapp/xaiserver/CMCompleteFieldActivity"/>
+
+      <!-- furthur specify that the messages in the wsdl:operation
+           "CMCompleteFieldActivity" use SOAP? @@@ -->
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="fault">
+        <soap:fault name="fault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <!-- wsdl:service names a new service "CMCompleteFieldActivityService" -->
+  <wsdl:service name="CMCompleteFieldActivityService">
+    <wsdl:documentation>CMCompleteFieldActivity version 2: Custom Field Activity Completion</wsdl:documentation> 
+
+    <!-- connect it to the binding "CMCompleteFieldActivitySoapBinding" above -->
+    <wsdl:port name="CMCompleteFieldActivityPort"
+               binding="xai:CMCompleteFieldActivitySoapBinding">
+
+      <!-- give the binding a network address -->
+      <soap:address location="http://ccbdevapp2:9500/spl/XAIApp/xaiserver/CMCompleteFieldActivity"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

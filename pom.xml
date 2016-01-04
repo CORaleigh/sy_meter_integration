@@ -7,10 +7,16 @@
   <version>2.0</version>
   <name>gov.raleighnc.switchyard.integration:meter-integration</name>
   <properties>
-    <switchyard.version>2.0.0.Alpha2</switchyard.version>
+    <switchyard.version>2.0.0.Beta1</switchyard.version>
+    <jackson.version>2.5.0</jackson.version> 
 	<integration.version>2.0</integration.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>  
     <dependency>
       <groupId>org.switchyard.components</groupId>
       <artifactId>switchyard-component-bean</artifactId>
@@ -62,7 +68,17 @@
       <groupId>gov.raleighnc.switchyard.integration</groupId>
       <artifactId>integration-library</artifactId>
       <version>${integration.version}</version>
-    </dependency>	    
+    </dependency>
+    <dependency>
+    	<groupId>org.switchyard.components</groupId>
+    	<artifactId>switchyard-component-camel</artifactId>
+    	<version>${switchyard.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.switchyard.components</groupId>
+    	<artifactId>switchyard-component-soap</artifactId>
+    	<version>${switchyard.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
